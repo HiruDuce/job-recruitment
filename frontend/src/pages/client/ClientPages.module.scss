@@ -1,67 +1,411 @@
+/* ==========================================================================
+   Client Pages Styles (Home, JobList, JobDetail, Company)
+   ========================================================================== */
+
 .homeContainer {
   display: flex;
   flex-direction: column;
-  gap: 48px;
-  padding-bottom: 48px;
+  gap: 56px;
+  padding-bottom: 24px;
 }
 
+/* Hero Section */
 .heroSection {
-  background: linear-gradient(135deg, #001529 0%, #003a8c 100%);
-  border-radius: 16px;
-  padding: 48px 32px;
+  background: linear-gradient(135deg, #071527 0%, #0d274c 45%, #003a8c 100%);
+  border-radius: 20px;
+  padding: 56px 40px 48px;
   color: #ffffff;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 40px -15px rgba(2, 6, 23, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 
-  @media (max-width: 576px) {
-    padding: 32px 16px;
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -20%;
+    width: 140%;
+    height: 200%;
+    background: radial-gradient(circle at 50% 20%, rgba(56, 189, 248, 0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    padding: 36px 20px 32px;
+    border-radius: 16px;
   }
 }
 
-.heroTitle {
-  color: #ffffff !important;
-  margin: 0 !important;
-  font-size: 32px;
-  font-weight: 700;
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #e0f2fe;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
-  @media (max-width: 576px) {
+.heroTitle {
+  color: #ffffff;
+  margin: 0 0 16px 0;
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+  max-width: 800px;
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
+
+  @media (max-width: 480px) {
     font-size: 24px;
   }
 }
 
+.heroTitleHighlight {
+  background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
 .heroSubtitle {
-  color: #d6e4ff;
+  color: #cbd5e1;
   font-size: 16px;
-  max-width: 600px;
-  margin: 0 auto;
+  line-height: 1.6;
+  max-width: 660px;
+  margin: 0 auto 28px;
+  font-weight: 400;
+
+  @media (max-width: 768px) {
+    font-size: 14.5px;
+    margin-bottom: 20px;
+  }
 }
 
 .heroSearchWrap {
   width: 100%;
-  max-width: 850px;
-  margin-top: 12px;
+  max-width: 900px;
+  margin: 0 auto 36px;
+  position: relative;
+  z-index: 5;
+}
+
+.heroStatsGrid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  width: 100%;
+  max-width: 860px;
+
+  @media (max-width: 768px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.statNumber {
+  font-size: 22px;
+  font-weight: 800;
+  color: #38bdf8;
+  letter-spacing: -0.5px;
+}
+
+.statLabel {
+  font-size: 12.5px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.statDivider {
+  width: 1px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.15);
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+/* Content Sections */
+.contentSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .sectionHeader {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  align-items: flex-end;
+  margin-bottom: 4px;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
 }
 
-.companyCard {
-  border-radius: 8px;
-  text-align: center;
-  transition: all 0.3s;
-  height: 100%;
-  cursor: pointer;
+.sectionBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0052cc;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.sectionTitle {
+  margin: 0 !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  letter-spacing: -0.3px;
+}
+
+.sectionDesc {
+  display: block;
+  font-size: 14px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.viewAllBtn {
+  font-weight: 600 !important;
+  color: #0052cc !important;
+  font-size: 14.5px !important;
+  padding: 0 !important;
+  transition: all 0.2s ease !important;
 
   &:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
-    border-color: #1677ff;
+    color: #0065ff !important;
+    transform: translateX(4px);
+  }
+}
+
+.loadingWrapper {
+  text-align: center;
+  padding: 60px 0;
+}
+
+/* Company Card */
+.companyCard {
+  border-radius: 12px !important;
+  border: 1px solid #e2e8f0 !important;
+  text-align: center;
+  transition: all 0.3s ease !important;
+  height: 100%;
+  cursor: pointer;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+
+  :global(.ant-card-body) {
+    padding: 24px 18px 20px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: space-between;
+  }
+
+  &:hover {
+    box-shadow: 0 16px 28px -6px rgba(15, 23, 42, 0.1) !important;
+    transform: translateY(-4px);
+    border-color: #93c5fd !important;
+
+    .companyCardTitle {
+      color: #0052cc !important;
+    }
+
+    .companyAvatar {
+      transform: scale(1.06);
+    }
+  }
+}
+
+.companyLogoBox {
+  width: 72px;
+  height: 72px;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  padding: 4px;
+  overflow: hidden;
+}
+
+.companyAvatar {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  transition: transform 0.2s ease;
+}
+
+.companyCardTitle {
+  margin: 0 !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  transition: color 0.2s ease;
+}
+
+.companyAddress {
+  display: block;
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.companyCardAction {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid #f1f5f9;
+  width: 100%;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #0052cc;
+}
+
+/* Recruiter Banner */
+.recruiterBanner {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-radius: 20px;
+  padding: 44px 40px;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 16px 32px -8px rgba(15, 23, 42, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  @media (max-width: 768px) {
+    padding: 32px 20px;
+  }
+}
+
+.recruiterContent {
+  max-width: 760px;
+}
+
+.recruiterBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 82, 204, 0.3);
+  border: 1px solid rgba(0, 82, 204, 0.5);
+  color: #60a5fa;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+}
+
+.recruiterTitle {
+  color: #ffffff;
+  font-size: 26px;
+  font-weight: 800;
+  margin: 0 0 12px 0;
+  line-height: 1.3;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
+}
+
+.recruiterDesc {
+  color: #94a3b8;
+  font-size: 14.5px;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+}
+
+.recruiterFeatures {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: #e2e8f0;
+}
+
+.checkIcon {
+  color: #10b981;
+  font-size: 14px;
+}
+
+.recruiterActions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.recruiterBtnPrimary {
+  background: linear-gradient(135deg, #0052cc 0%, #0065ff 100%) !important;
+  border: none !important;
+  font-weight: 600 !important;
+  font-size: 14.5px !important;
+  height: 44px !important;
+  padding: 0 24px !important;
+  box-shadow: 0 4px 14px rgba(0, 82, 204, 0.4) !important;
+
+  &:hover {
+    opacity: 0.95;
+    transform: translateY(-1px);
+  }
+}
+
+.recruiterBtnSecondary {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  font-size: 14.5px !important;
+  height: 44px !important;
+  padding: 0 20px !important;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.16) !important;
+    border-color: #ffffff !important;
   }
 }

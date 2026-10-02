@@ -12,6 +12,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { store } from './redux/store';
 import { injectStore, refreshToken } from './config/axios-customize';
 import { router } from './router';
+import './styles/global.scss';
 
 dayjs.extend(relativeTime);
 dayjs.locale('vi');
@@ -24,7 +25,30 @@ const App = () => {
   }, []);
 
   return (
-    <ConfigProvider locale={viVN}>
+    <ConfigProvider
+      locale={viVN}
+      theme={{
+        token: {
+          colorPrimary: '#0052cc',
+          fontFamily:
+            "'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          borderRadius: 8,
+          colorLink: '#0052cc',
+          colorLinkHover: '#0065ff',
+          colorTextBase: '#0f172a',
+          controlHeight: 40,
+        },
+        components: {
+          Card: {
+            headerFontSize: 16,
+          },
+          Button: {
+            controlHeight: 40,
+            paddingContentHorizontal: 16,
+          },
+        },
+      }}
+    >
       <RouterProvider router={router} />
     </ConfigProvider>
   );

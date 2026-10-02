@@ -73,8 +73,14 @@ export const Header: React.FC = () => {
       <div className={styles.headerContainer}>
         <div className={styles.leftSection}>
           <Link to="/" className={styles.logo}>
-            <CodeOutlined style={{ fontSize: 24 }} />
-            <span>ITJobs</span>
+            <div className={styles.logoIcon}>
+              <CodeOutlined />
+            </div>
+            <div className={styles.logoText}>
+              <span className={styles.brandPrimary}>IT</span>
+              <span className={styles.brandDark}>Jobs</span>
+              <span className={styles.brandBadge}>VN</span>
+            </div>
           </Link>
           <nav className={styles.desktopNav}>
             <NavLink
@@ -83,7 +89,8 @@ export const Header: React.FC = () => {
                 `${styles.navLink} ${isActive ? styles.activeLink : ''}`
               }
             >
-              Việc làm IT
+              <span>Việc làm IT</span>
+              <span className={styles.navHotBadge}>HOT</span>
             </NavLink>
             <NavLink
               to="/company"
@@ -91,7 +98,7 @@ export const Header: React.FC = () => {
                 `${styles.navLink} ${isActive ? styles.activeLink : ''}`
               }
             >
-              Công ty
+              Công ty công nghệ
             </NavLink>
           </nav>
         </div>
@@ -100,19 +107,42 @@ export const Header: React.FC = () => {
           {isAuthenticated && user ? (
             <Dropdown menu={{ items: menuItems }} placement="bottomRight" arrow>
               <div className={styles.userDropdownTrigger}>
-                <Avatar style={{ backgroundColor: '#1677ff' }}>
-                  {user.name?.[0]?.toUpperCase()}
+                <Avatar
+                  style={{
+                    background: 'linear-gradient(135deg, #0052cc 0%, #0065ff 100%)',
+                    fontWeight: 600,
+                  }}
+                  size="default"
+                >
+                  {user.name?.[0]?.toUpperCase() || <UserOutlined />}
                 </Avatar>
-                <span className={styles.userName}>{user.name}</span>
+                <div className={styles.userInfo}>
+                  <span className={styles.userName}>{user.name}</span>
+                  <span className={styles.userRole}>
+                    {user?.role?.name === 'SUPER_ADMIN'
+                      ? 'Admin'
+                      : user?.role?.name === 'HR'
+                      ? 'HR Recruiter'
+                      : 'Ứng viên IT'}
+                  </span>
+                </div>
               </div>
             </Dropdown>
           ) : (
-            <div style={{ display: 'flex', gap: 12 }}>
-              <Button type="default" onClick={() => navigate('/login')}>
+            <div className={styles.authButtons}>
+              <Button
+                type="text"
+                className={styles.loginBtn}
+                onClick={() => navigate('/login')}
+              >
                 Đăng nhập
               </Button>
-              <Button type="primary" onClick={() => navigate('/register')}>
-                Đăng ký
+              <Button
+                type="primary"
+                className={styles.registerBtn}
+                onClick={() => navigate('/register')}
+              >
+                Tạo hồ sơ / Đăng ký
               </Button>
             </div>
           )}
@@ -121,7 +151,7 @@ export const Header: React.FC = () => {
         <div className={styles.mobileTrigger}>
           <Button
             type="text"
-            icon={<MenuOutlined />}
+            icon={<MenuOutlined style={{ fontSize: 20 }} />}
             onClick={() => setMobileOpen(true)}
           />
         </div>

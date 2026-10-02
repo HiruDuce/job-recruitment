@@ -16,13 +16,17 @@ import {
   Upload,
 } from 'antd';
 import {
-  DollarOutlined,
+  DollarCircleFilled,
   EnvironmentOutlined,
   CalendarOutlined,
   UsergroupAddOutlined,
-  SafetyCertificateOutlined,
-  UploadOutlined,
+  SafetyCertificateFilled,
   InboxOutlined,
+  SendOutlined,
+  CheckCircleFilled,
+  InfoCircleOutlined,
+  BankOutlined,
+  FilePdfOutlined,
 } from '@ant-design/icons';
 import { Link, useNavigate, useParams } from 'react-router';
 import DOMPurify from 'dompurify';
@@ -48,7 +52,6 @@ export const JobDetail: React.FC = () => {
 
   // Apply Modal state
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [uploading, setUploading] = useState<boolean>(false);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
 
@@ -114,7 +117,7 @@ export const JobDetail: React.FC = () => {
 
   if (loading) {
     return (
-      <div style={{ textAlign: 'center', padding: 80 }}>
+      <div style={{ textAlign: 'center', padding: '100px 0' }}>
         <Spin size="large" />
       </div>
     );
@@ -122,10 +125,23 @@ export const JobDetail: React.FC = () => {
 
   if (!job) {
     return (
-      <div style={{ textAlign: 'center', padding: 80 }}>
+      <div
+        style={{
+          textAlign: 'center',
+          padding: '80px 20px',
+          background: '#ffffff',
+          borderRadius: 14,
+          border: '1px solid #e2e8f0',
+        }}
+      >
         <Title level={4}>Không tìm thấy thông tin việc làm này</Title>
+        <Paragraph type="secondary">
+          Việc làm có thể đã hết hạn hoặc tạm ngừng nhận hồ sơ.
+        </Paragraph>
         <Link to="/job">
-          <Button type="primary">Quay lại danh sách việc làm</Button>
+          <Button type="primary" size="large" style={{ marginTop: 12 }}>
+            Quay lại danh sách việc làm
+          </Button>
         </Link>
       </div>
     );
@@ -136,7 +152,8 @@ export const JobDetail: React.FC = () => {
     LOCATIONS.find((l) => l.value === job.location)?.label || job.location;
 
   return (
-    <div style={{ maxWidth: 1100, margin: '0 auto', paddingBottom: 48 }}>
+    <div style={{ maxWidth: 1140, margin: '0 auto', paddingBottom: 48 }}>
+      {/* Breadcrumb */}
       <Breadcrumb
         style={{ marginBottom: 20 }}
         items={[
@@ -146,110 +163,252 @@ export const JobDetail: React.FC = () => {
         ]}
       />
 
-      {/* Header Card */}
-      <Card style={{ marginBottom: 24, borderRadius: 12 }}>
+      {/* Header Card Hero */}
+      <div
+        style={{
+          background: '#ffffff',
+          borderRadius: 16,
+          padding: '28px 24px',
+          border: '1px solid #e2e8f0',
+          boxShadow: '0 12px 32px -8px rgba(15, 23, 42, 0.08)',
+          marginBottom: 24,
+        }}
+      >
         <Row gutter={[24, 24]} align="middle">
+          {/* Logo công ty */}
           <Col xs={24} sm={6} md={4} style={{ textAlign: 'center' }}>
-            <Avatar
-              src={company?.logo}
-              shape="square"
-              size={96}
-              style={{ objectFit: 'contain' }}
+            <div
+              style={{
+                width: 88,
+                height: 88,
+                margin: '0 auto',
+                background: '#f8fafc',
+                border: '1px solid #e2e8f0',
+                borderRadius: 12,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 4,
+                overflow: 'hidden',
+              }}
             >
-              {(company?.name || job.name).charAt(0).toUpperCase()}
-            </Avatar>
+              <Avatar
+                src={company?.logo}
+                shape="square"
+                size={80}
+                style={{ objectFit: 'contain' }}
+              >
+                {(company?.name || job.name).charAt(0).toUpperCase()}
+              </Avatar>
+            </div>
           </Col>
 
+          {/* Chi tiết tiêu đề & metadata */}
           <Col xs={24} sm={18} md={14}>
-            <Title level={3} style={{ margin: 0 }}>
+            <Title
+              level={2}
+              style={{
+                margin: 0,
+                fontSize: 22,
+                fontWeight: 800,
+                color: '#0f172a',
+                lineHeight: 1.35,
+                letterSpacing: '-0.3px',
+              }}
+            >
               {job.name}
             </Title>
-            <div style={{ marginTop: 8 }}>
+
+            <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
               {company?._id ? (
                 <Link to={`/company/${company._id}`}>
-                  <Text strong style={{ fontSize: 16, color: '#1677ff' }}>
+                  <Text strong style={{ fontSize: 15, color: '#0052cc' }}>
                     {company.name}
                   </Text>
                 </Link>
               ) : (
-                <Text strong style={{ fontSize: 16 }}>
+                <Text strong style={{ fontSize: 15, color: '#334155' }}>
                   {company?.name || 'Doanh nghiệp IT'}
                 </Text>
               )}
+              <SafetyCertificateFilled style={{ color: '#0052cc', fontSize: 14 }} />
             </div>
 
-            <Space wrap size={[16, 8]} style={{ marginTop: 12 }}>
-              <Space>
-                <DollarOutlined style={{ color: '#52c41a' }} />
-                <Text strong style={{ color: '#d4380d', fontSize: 15 }}>
+            {/* Badges Lương, Địa điểm, Hạn nộp */}
+            <Space wrap size={[10, 10]} style={{ marginTop: 14 }}>
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  background: '#ecfdf5',
+                  border: '1px solid #a7f3d0',
+                  padding: '4px 12px',
+                  borderRadius: 8,
+                }}
+              >
+                <DollarCircleFilled style={{ color: '#059669', fontSize: 16 }} />
+                <span style={{ color: '#047857', fontWeight: 700, fontSize: 14.5 }}>
                   {typeof job.salary === 'number'
                     ? `${job.salary.toLocaleString('vi-VN')} đ`
                     : 'Thỏa thuận'}
-                </Text>
-              </Space>
+                </span>
+              </div>
 
-              <Space>
-                <EnvironmentOutlined style={{ color: '#888' }} />
-                <Text>{locationLabel}</Text>
-              </Space>
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  background: '#f8fafc',
+                  border: '1px solid #e2e8f0',
+                  padding: '4px 12px',
+                  borderRadius: 8,
+                  fontSize: 13.5,
+                  color: '#475569',
+                  fontWeight: 500,
+                }}
+              >
+                <EnvironmentOutlined style={{ color: '#64748b' }} />
+                <span>{locationLabel}</span>
+              </div>
 
-              <Space>
-                <CalendarOutlined style={{ color: '#888' }} />
-                <Text type="secondary">
-                  Hạn nộp: {job.endDate ? dayjs(job.endDate).format('DD/MM/YYYY') : '-'}
-                </Text>
-              </Space>
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  background: '#fff7ed',
+                  border: '1px solid #fed7aa',
+                  padding: '4px 12px',
+                  borderRadius: 8,
+                  fontSize: 13,
+                  color: '#c2410c',
+                  fontWeight: 500,
+                }}
+              >
+                <CalendarOutlined style={{ color: '#ea580c' }} />
+                <span>Hạn nộp: {job.endDate ? dayjs(job.endDate).format('DD/MM/YYYY') : 'Đang mở'}</span>
+              </div>
             </Space>
           </Col>
 
+          {/* Nút Ứng tuyển ngay */}
           <Col xs={24} md={6} style={{ textAlign: 'right' }}>
             <Button
               type="primary"
               size="large"
+              icon={<SendOutlined />}
               block
               onClick={handleApplyClick}
-              style={{ height: 48, fontSize: 16, fontWeight: 600 }}
+              style={{
+                height: 48,
+                fontSize: 16,
+                fontWeight: 700,
+                background: 'linear-gradient(135deg, #0052cc 0%, #0065ff 100%)',
+                border: 'none',
+                boxShadow: '0 4px 16px rgba(0, 82, 204, 0.35)',
+              }}
             >
               Ứng tuyển ngay
             </Button>
           </Col>
         </Row>
-      </Card>
+      </div>
 
-      {/* Main Content Layout */}
+      {/* Main Content Layout 2 Cột */}
       <Row gutter={[24, 24]}>
-        {/* Left: Job Description */}
+        {/* Cột Trái: Mô tả công việc chi tiết */}
         <Col xs={24} lg={16}>
-          <Card title="Mô tả công việc" style={{ borderRadius: 12 }}>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(job.description || ''),
-              }}
-              style={{ lineHeight: 1.8, fontSize: 15 }}
-            />
-          </Card>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            <Card
+              title={
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 17, fontWeight: 700 }}>
+                  <span>Chi tiết tin tuyển dụng</span>
+                </div>
+              }
+              style={{ borderRadius: 14, border: '1px solid #e2e8f0' }}
+              styles={{ body: { padding: '24px 28px' } }}
+            >
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(job.description || ''),
+                }}
+                style={{
+                  lineHeight: 1.85,
+                  fontSize: 15,
+                  color: '#1e293b',
+                  wordBreak: 'break-word',
+                }}
+              />
+
+              <div
+                style={{
+                  marginTop: 32,
+                  padding: '20px',
+                  background: '#f8fafc',
+                  borderRadius: 12,
+                  border: '1px solid #e2e8f0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: 16,
+                }}
+              >
+                <div>
+                  <div style={{ fontWeight: 700, color: '#0f172a', fontSize: 14 }}>
+                    Bảo vệ quyền lợi ứng viên cùng ITJobs
+                  </div>
+                  <div style={{ fontSize: 13, color: '#64748b', marginTop: 2 }}>
+                    Tin tuyển dụng đã được xác minh tính xác thực và chất lượng.
+                  </div>
+                </div>
+                <Button
+                  type="primary"
+                  onClick={handleApplyClick}
+                  style={{
+                    background: 'linear-gradient(135deg, #0052cc 0%, #0065ff 100%)',
+                    border: 'none',
+                    fontWeight: 600,
+                  }}
+                >
+                  Nộp hồ sơ ngay
+                </Button>
+              </div>
+            </Card>
+          </div>
         </Col>
 
-        {/* Right: Job details sidebar */}
+        {/* Cột Phải: Sidebar Thông tin tuyển dụng & Công ty */}
         <Col xs={24} lg={8}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-            {/* General info */}
-            <Card title="Thông tin tuyển dụng" size="small" style={{ borderRadius: 12 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {/* Box Thông tin tuyển dụng */}
+            <Card
+              title={
+                <span style={{ fontSize: 15, fontWeight: 700, color: '#0f172a' }}>
+                  Thông tin chung
+                </span>
+              }
+              style={{ borderRadius: 14, border: '1px solid #e2e8f0' }}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 <div>
                   <Text type="secondary" style={{ fontSize: 13 }}>
-                    Cấp bậc
+                    Cấp bậc tuyển dụng
                   </Text>
-                  <div style={{ fontWeight: 500, marginTop: 2 }}>{job.level}</div>
+                  <div style={{ fontWeight: 600, color: '#0f172a', marginTop: 3 }}>
+                    {job.level}
+                  </div>
                 </div>
 
                 <div>
                   <Text type="secondary" style={{ fontSize: 13 }}>
-                    Số lượng tuyển
+                    Số lượng cần tuyển
                   </Text>
-                  <div style={{ fontWeight: 500, marginTop: 2 }}>
-                    <UsergroupAddOutlined style={{ marginRight: 6 }} />
-                    {job.quantity} người
+                  <div style={{ fontWeight: 600, color: '#0f172a', marginTop: 3, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <UsergroupAddOutlined style={{ color: '#0052cc' }} />
+                    <span>{job.quantity} người</span>
                   </div>
                 </div>
 
@@ -257,17 +416,30 @@ export const JobDetail: React.FC = () => {
                   <Text type="secondary" style={{ fontSize: 13 }}>
                     Địa điểm làm việc
                   </Text>
-                  <div style={{ fontWeight: 500, marginTop: 2 }}>{locationLabel}</div>
+                  <div style={{ fontWeight: 600, color: '#0f172a', marginTop: 3 }}>
+                    {locationLabel}
+                  </div>
                 </div>
 
                 <div>
                   <Text type="secondary" style={{ fontSize: 13 }}>
                     Kỹ năng yêu cầu
                   </Text>
-                  <div style={{ marginTop: 6 }}>
+                  <div style={{ marginTop: 8 }}>
                     <Space wrap size={[6, 6]}>
                       {job.skills?.map((s) => (
-                        <Tag key={s} color="blue">
+                        <Tag
+                          key={s}
+                          style={{
+                            background: '#eff6ff',
+                            border: '1px solid #dbeafe',
+                            color: '#1d4ed8',
+                            fontSize: 12,
+                            fontWeight: 600,
+                            padding: '3px 8px',
+                            borderRadius: 6,
+                          }}
+                        >
                           {s}
                         </Tag>
                       ))}
@@ -277,22 +449,50 @@ export const JobDetail: React.FC = () => {
               </div>
             </Card>
 
-            {/* Company info preview */}
+            {/* Box Thông tin công ty */}
             {company && (
-              <Card title="Về công ty" size="small" style={{ borderRadius: 12 }}>
-                <Title level={5} style={{ margin: 0 }}>
-                  {company.name}
-                </Title>
+              <Card
+                title={
+                  <span style={{ fontSize: 15, fontWeight: 700, color: '#0f172a' }}>
+                    Về công ty
+                  </span>
+                }
+                style={{ borderRadius: 14, border: '1px solid #e2e8f0' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                  <Avatar
+                    src={company.logo}
+                    shape="square"
+                    size={48}
+                    style={{ border: '1px solid #e2e8f0', objectFit: 'contain' }}
+                  >
+                    {company.name.charAt(0).toUpperCase()}
+                  </Avatar>
+                  <div>
+                    <Title level={5} style={{ margin: 0, fontSize: 15 }}>
+                      {company.name}
+                    </Title>
+                    <Text type="secondary" style={{ fontSize: 12 }}>
+                      <BankOutlined style={{ marginRight: 4 }} /> Doanh nghiệp công nghệ
+                    </Text>
+                  </div>
+                </div>
+
                 <Paragraph
                   type="secondary"
                   ellipsis={{ rows: 2 }}
-                  style={{ marginTop: 8, fontSize: 13 }}
+                  style={{ fontSize: 13, lineHeight: 1.5, marginBottom: 12 }}
                 >
+                  <EnvironmentOutlined style={{ marginRight: 4 }} />
                   {company.address}
                 </Paragraph>
+
                 {company._id && (
                   <Link to={`/company/${company._id}`}>
-                    <Button type="link" style={{ padding: 0 }}>
+                    <Button
+                      type="link"
+                      style={{ padding: 0, fontWeight: 600, color: '#0052cc' }}
+                    >
                       Xem trang công ty →
                     </Button>
                   </Link>
@@ -305,7 +505,12 @@ export const JobDetail: React.FC = () => {
 
       {/* Apply Modal */}
       <Modal
-        title={`Ứng tuyển vị trí: ${job.name}`}
+        title={
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <FilePdfOutlined style={{ color: '#0052cc', fontSize: 20 }} />
+            <span>Ứng tuyển vị trí: {job.name}</span>
+          </div>
+        }
         open={modalOpen}
         onCancel={() => {
           if (!submitting) {
@@ -318,10 +523,12 @@ export const JobDetail: React.FC = () => {
         cancelText="Hủy"
         onOk={handleConfirmApply}
         destroyOnClose
+        width={560}
       >
         <div style={{ padding: '16px 0' }}>
-          <Paragraph type="secondary">
-            Vui lòng tải lên hồ sơ CV của bạn định dạng <strong>PDF</strong> (tối đa 5MB) để gửi đến nhà tuyển dụng.
+          <Paragraph type="secondary" style={{ fontSize: 13.5, marginBottom: 16 }}>
+            Vui lòng tải lên file hồ sơ CV của bạn định dạng <strong>PDF</strong> (tối đa 5MB).
+            Nhà tuyển dụng sẽ nhận được hồ sơ ngay sau khi bạn xác nhận.
           </Paragraph>
 
           <Dragger
@@ -342,21 +549,47 @@ export const JobDetail: React.FC = () => {
               }
 
               setPdfFile(file);
-              return false; // Chặn tự động upload của antd để xử lý thủ công khi bấm Ok
+              return false;
             }}
             onRemove={() => setPdfFile(null)}
+            style={{
+              padding: '24px 16px',
+              background: '#f8fafc',
+              borderColor: '#cbd5e1',
+              borderRadius: 12,
+            }}
           >
             <p className="ant-upload-drag-icon">
-              <InboxOutlined style={{ color: '#1677ff', fontSize: 44 }} />
+              <InboxOutlined style={{ color: '#0052cc', fontSize: 44 }} />
             </p>
-            <p className="ant-upload-text">Nhấp hoặc kéo thả file CV (PDF) vào đây</p>
-            <p className="ant-upload-hint">Chỉ hỗ trợ file PDF duy nhất có dung lượng dưới 5MB</p>
+            <p className="ant-upload-text" style={{ fontWeight: 600, color: '#0f172a' }}>
+              Nhấp hoặc kéo thả file CV (PDF) vào đây
+            </p>
+            <p className="ant-upload-hint" style={{ fontSize: 12.5, color: '#64748b' }}>
+              Chỉ hỗ trợ file PDF duy nhất có dung lượng dưới 5MB
+            </p>
           </Dragger>
 
           {pdfFile && (
-            <div style={{ marginTop: 12, color: '#52c41a', fontSize: 13 }}>
-              ✓ Đã chọn file: <strong>{pdfFile.name}</strong> (
-              {(pdfFile.size / 1024 / 1024).toFixed(2)} MB)
+            <div
+              style={{
+                marginTop: 14,
+                color: '#059669',
+                background: '#ecfdf5',
+                border: '1px solid #a7f3d0',
+                padding: '8px 12px',
+                borderRadius: 8,
+                fontSize: 13,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+              }}
+            >
+              <CheckCircleFilled />
+              <span>
+                Đã chọn file: <strong>{pdfFile.name}</strong> (
+                {(pdfFile.size / 1024 / 1024).toFixed(2)} MB)
+              </span>
             </div>
           )}
         </div>

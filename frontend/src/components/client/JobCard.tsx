@@ -1,6 +1,12 @@
 import React from 'react';
-import { Avatar, Card, Space, Tag, Typography } from 'antd';
-import { DollarOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import { Avatar, Space, Tag, Typography } from 'antd';
+import {
+  DollarCircleFilled,
+  EnvironmentOutlined,
+  ClockCircleOutlined,
+  ThunderboltFilled,
+  SafetyCertificateFilled,
+} from '@ant-design/icons';
 import { useNavigate } from 'react-router';
 import dayjs from 'dayjs';
 import { LOCATIONS } from '../../config/constants';
@@ -19,86 +25,98 @@ export const JobCard: React.FC<IProps> = ({ job }) => {
   const locationLabel =
     LOCATIONS.find((l) => l.value === job.location)?.label || job.location;
 
-  return (
-    <Card
-      className={styles.jobCard}
-      hoverable
-      onClick={() => navigate(`/job/${job._id}`)}
-      styles={{ body: { display: 'flex', flexDirection: 'column', height: '100%', gap: 12 } }}
-    >
-      <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-        <Avatar
-          src={company?.logo}
-          shape="square"
-          size={52}
-          alt={company?.name}
-          style={{ flexShrink: 0, objectFit: 'contain' }}
-        >
-          {(company?.name || job.name).charAt(0).toUpperCase()}
-        </Avatar>
+  // Kiểm tra job mới đăng trong vòng 7 ngày
+  const isNewJob =
+    job.createdAt && dayjs().diff(dayjs(job.createdAt), 'day') <= 7;
 
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <Title
-            level={5}
-            ellipsis={{ rows: 1 }}
-            style={{ margin: 0, color: '#1677ff' }}
+  return (
+    <div
+      className={styles.jobCard}
+      onClick={() => navigate(`/job/${job._id}`)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') navigate(`/job/${job._id}`);
+      }}
+    >
+      {/* Top Header Card */}
+      <div className={styles.cardHeader}>
+        <div className={styles.logoWrapper}>
+          <Avatar
+            src={company?.logo}
+            shape="square"
+            size={52}
+            alt={company?.name}
+            className={styles.companyLogo}
           >
-            {job.name}
-          </Title>
-          <Text
-            type="secondary"
-            ellipsis
-            style={{ display: 'block', fontSize: 13, marginTop: 2 }}
-          >
-            {company?.name || 'Công ty ẩn danh'}
-          </Text>
+            {(company?.name || job.name).charAt(0).toUpperCase()}
+          </Avatar>
+        </div>
+
+        <div className={styles.headerInfo}>
+          <div className={styles.titleRow}>
+            <Title level={5} ellipsis={{ rows: 1 }} className={styles.jobTitle}>
+              {job.name}
+            </Title>
+            {isNewJob && (
+              <span className={styles.hotBadge}>
+                <ThunderboltFilled /> HOT
+              </span>
+            )}
+          </div>
+          <div className={styles.companyRow}>
+            <Text ellipsis className={styles.companyName}>
+              {company?.name || 'Doanh nghiệp IT'}
+            </Text>
+            <SafetyCertificateFilled className={styles.verifyIcon} title="Nhà tuyển dụng đã xác thực" />
+          </div>
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, fontSize: 13 }}>
-        <Space size={4}>
-          <DollarOutlined style={{ color: '#52c41a' }} />
-          <Text strong style={{ color: '#d4380d' }}>
+      {/* Salary & Location Highlights */}
+      <div className={styles.metaRow}>
+        <div className={styles.salaryBadge}>
+          <DollarCircleFilled className={styles.salaryIcon} />
+          <span className={styles.salaryText}>
             {typeof job.salary === 'number'
               ? `${job.salary.toLocaleString('vi-VN')} đ`
               : 'Thỏa thuận'}
-          </Text>
-        </Space>
+          </span>
+        </div>
 
-        <Space size={4}>
-          <EnvironmentOutlined style={{ color: '#888' }} />
-          <Text type="secondary">{locationLabel}</Text>
-        </Space>
+        <div className={styles.locationBadge}>
+          <EnvironmentOutlined />
+          <span>{locationLabel}</span>
+        </div>
+
+        <div className={styles.levelBadge}>
+          <span>{job.level}</span>
+        </div>
       </div>
 
-      <div style={{ flex: 1 }}>
-        <Space wrap size={[4, 4]}>
+      {/* Skills Badges */}
+      <div className={styles.skillsContainer}>
+        <Space wrap size={[6, 6]}>
           {job.skills?.slice(0, 4).map((skill) => (
-            <Tag key={skill} color="blue" style={{ fontSize: 11, margin: 0 }}>
+            <Tag key={skill} className={styles.skillTag}>
               {skill}
             </Tag>
           ))}
           {job.skills && job.skills.length > 4 && (
-            <Tag style={{ fontSize: 11, margin: 0 }}>+{job.skills.length - 4}</Tag>
+            <Tag className={styles.moreSkillTag}>+{job.skills.length - 4}</Tag>
           )}
         </Space>
       </div>
 
-      <div
-        style={{
-          borderTop: '1px solid #f0f0f0',
-          paddingTop: 8,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          fontSize: 12,
-          color: '#8c8c8c',
-        }}
-      >
-        <span>Cấp bậc: {job.level}</span>
-        <span>{job.createdAt ? dayjs(job.createdAt).fromNow() : ''}</span>
+      {/* Card Footer */}
+      <div className={styles.cardFooter}>
+        <span className={styles.timePosted}>
+          <ClockCircleOutlined style={{ marginRight: 4 }} />
+          {job.createdAt ? dayjs(job.createdAt).fromNow() : 'Đang tuyển'}
+        </span>
+        <span className={styles.viewDetailText}>Xem chi tiết →</span>
       </div>
-    </Card>
+    </div>
   );
 };
 

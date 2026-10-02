@@ -43,43 +43,88 @@ export const CompanyList: React.FC = () => {
   }, [current, pageSize, searchTerm]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, paddingBottom: 48 }}>
-      <div>
-        <Title level={2} style={{ marginBottom: 8 }}>
-          Danh sách công ty IT hàng đầu
-        </Title>
-        <Text type="secondary">
-          Tìm hiểu văn hóa, chế độ đãi ngộ và môi trường làm việc tại các công ty công nghệ
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 28, paddingBottom: 48 }}>
+      <div
+        style={{
+          background: 'linear-gradient(135deg, #071527 0%, #0d274c 50%, #003a8c 100%)',
+          borderRadius: 16,
+          padding: '36px 32px 32px',
+          color: '#ffffff',
+          boxShadow: '0 12px 32px -8px rgba(2, 6, 23, 0.25)',
+        }}
+      >
+        <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
+          <Title
+            level={2}
+            style={{
+              color: '#ffffff',
+              margin: 0,
+              fontSize: 28,
+              fontWeight: 800,
+              letterSpacing: '-0.3px',
+            }}
+          >
+            Khám Phá Công Ty IT Hàng Đầu
+          </Title>
+          <Text style={{ color: '#cbd5e1', fontSize: 14.5, marginTop: 6, display: 'block' }}>
+            Tìm hiểu môi trường làm việc, văn hóa doanh nghiệp và cơ hội nghề nghiệp tại hơn 500+ công ty công nghệ
+          </Text>
+
+          <div style={{ marginTop: 24 }}>
+            <Input
+              size="large"
+              placeholder="Nhập tên công ty công nghệ..."
+              prefix={<SearchOutlined style={{ color: '#0052cc', marginRight: 4 }} />}
+              allowClear
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrent(1);
+              }}
+              style={{
+                borderRadius: 10,
+                height: 48,
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          background: '#ffffff',
+          padding: '14px 20px',
+          borderRadius: 12,
+          border: '1px solid #e2e8f0',
+        }}
+      >
+        <Text style={{ fontSize: 15, color: '#334155' }}>
+          Hiển thị <strong style={{ color: '#0052cc' }}>{total}</strong> doanh nghiệp công nghệ
         </Text>
       </div>
 
-      <div style={{ maxWidth: 450 }}>
-        <Input
-          size="large"
-          placeholder="Tìm theo tên công ty..."
-          prefix={<SearchOutlined style={{ color: '#888' }} />}
-          allowClear
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setCurrent(1);
-          }}
-        />
-      </div>
-
       {loading ? (
-        <div style={{ textAlign: 'center', padding: 60 }}>
+        <div style={{ textAlign: 'center', padding: '80px 0' }}>
           <Spin size="large" />
         </div>
       ) : companies.length > 0 ? (
         <>
-          <Row gutter={[16, 16]}>
+          <Row gutter={[20, 20]}>
             {companies.map((company) => (
               <Col key={company._id} xs={24} sm={12} md={8} lg={6}>
                 <Card
                   hoverable
                   onClick={() => navigate(`/company/${company._id}`)}
-                  style={{ height: '100%', borderRadius: 10, textAlign: 'center' }}
+                  style={{
+                    height: '100%',
+                    borderRadius: 12,
+                    border: '1px solid #e2e8f0',
+                    transition: 'all 0.28s ease',
+                  }}
                   styles={{
                     body: {
                       display: 'flex',
@@ -87,26 +132,45 @@ export const CompanyList: React.FC = () => {
                       alignItems: 'center',
                       height: '100%',
                       justifyContent: 'space-between',
-                      padding: 20,
+                      padding: 24,
                     },
                   }}
                 >
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <Avatar
-                      src={company.logo}
-                      shape="square"
-                      size={72}
-                      style={{ marginBottom: 16, objectFit: 'contain' }}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                    <div
+                      style={{
+                        width: 72,
+                        height: 72,
+                        background: '#f8fafc',
+                        border: '1px solid #f1f5f9',
+                        borderRadius: 12,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginBottom: 16,
+                        padding: 4,
+                      }}
                     >
-                      {company.name.charAt(0).toUpperCase()}
-                    </Avatar>
+                      <Avatar
+                        src={company.logo}
+                        shape="square"
+                        size={64}
+                        style={{ objectFit: 'contain' }}
+                      >
+                        {company.name.charAt(0).toUpperCase()}
+                      </Avatar>
+                    </div>
 
-                    <Title level={5} ellipsis={{ rows: 2 }} style={{ margin: 0, color: '#1677ff' }}>
+                    <Title
+                      level={5}
+                      ellipsis={{ rows: 2 }}
+                      style={{ margin: 0, color: '#0f172a', textAlign: 'center', fontWeight: 700 }}
+                    >
                       {company.name}
                     </Title>
                   </div>
 
-                  <div style={{ marginTop: 12, width: '100%' }}>
+                  <div style={{ marginTop: 14, width: '100%', textAlign: 'center' }}>
                     <Text
                       type="secondary"
                       ellipsis
@@ -115,24 +179,48 @@ export const CompanyList: React.FC = () => {
                       <EnvironmentOutlined style={{ marginRight: 4 }} />
                       {company.address}
                     </Text>
+
+                    <div
+                      style={{
+                        marginTop: 12,
+                        paddingTop: 10,
+                        borderTop: '1px solid #f1f5f9',
+                        fontSize: 12.5,
+                        fontWeight: 600,
+                        color: '#0052cc',
+                      }}
+                    >
+                      Xem cơ hội việc làm →
+                    </div>
                   </div>
                 </Card>
               </Col>
             ))}
           </Row>
 
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              marginTop: 16,
+              background: '#ffffff',
+              padding: '16px',
+              borderRadius: 12,
+              border: '1px solid #e2e8f0',
+            }}
+          >
             <Pagination
               current={current}
               pageSize={pageSize}
               total={total}
               onChange={(page) => setCurrent(page)}
+              showSizeChanger={false}
             />
           </div>
         </>
       ) : (
         <Empty
-          description="Không tìm thấy công ty nào phù hợp"
+          description="Không tìm thấy công ty nào phù hợp với từ khóa"
           style={{ padding: '60px 0' }}
         />
       )}

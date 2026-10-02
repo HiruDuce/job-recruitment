@@ -14,8 +14,10 @@ export const ClientLayout: React.FC = () => {
       }}
     >
       <Header />
-      <main style={{ flex: 1 }}>
-        <Outlet />
+      <main style={{ flex: 1, padding: '32px 0' }}>
+        <div className="client-container">
+          <Outlet />
+        </div>
       </main>
       <Footer />
     </div>
