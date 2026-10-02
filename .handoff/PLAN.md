@@ -224,7 +224,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
     - Chặn xoá role `ADMIN` (`BadRequestException`). Trùng unique → trả 400 thay vì 500 (bắt lỗi code `11000` trong service).
   - Tiêu chí đạt: build pass; CRUD gọi được qua Swagger (tạm thời chưa có guard); list trả đúng format phân trang; xoá là soft delete và bản ghi đã xoá không xuất hiện trong list.
 
-- [ ] **T3: Module users**
+- [x] **T3: Module users**
   - Files: `src/users/**`, `src/app.module.ts`
   - Làm:
     - `User` schema như mục 5 (`password`, `refreshToken` `select: false`; email lowercase + unique partial index).

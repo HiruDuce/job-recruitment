@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { softDeletePlugin } from './core/soft-delete.plugin';
 import { PermissionsModule } from './permissions/permissions.module';
 import { RolesModule } from './roles/roles.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { RolesModule } from './roles/roles.module';
     }),
     PermissionsModule,
     RolesModule,
+    UsersModule,
   ],
 })
 export class AppModule {}
