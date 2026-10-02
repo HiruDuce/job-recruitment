@@ -286,7 +286,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
       - `update`/`remove`: điều kiện `{ _id, ...scope(user) }`, không match → 404 (HR không sửa được job công ty khác). HR không được đổi `company`.
   - Tiêu chí đạt: build pass; `GET /jobs?skills=react,nodejs&location=HANOI` lọc đúng và ẩn job hết hạn/inactive; HR chỉ thấy/sửa/xoá job công ty mình.
 
-- [ ] **T9: Module resumes (+ gửi mail khi đổi trạng thái)**
+- [x] **T9: Module resumes (+ gửi mail khi đổi trạng thái)**
   - Files: `src/resumes/**`, `src/app.module.ts`
   - Làm:
     - Schema như mục 5. `CreateResumeDto { url @Matches(/^\/images\/resume\/.+\.pdf$/), job @IsMongoId }`; `UpdateResumeStatusDto { status @IsIn(RESUME_STATUS) }`; `QueryResumeDto` (status, job).
