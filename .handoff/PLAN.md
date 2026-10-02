@@ -360,7 +360,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
   - Làm: ProTable gọi `GET /jobs/manage`; cột name, company.name, skills (Tag), location, level, salary (format `toLocaleString('vi-VN')` + đ), endDate, isActive; search name, location, level, isActive. `DrawerForm`: name, skills (`ProFormSelect mode="tags"` options `SKILLS`), company (`ProFormSelect`, **ẩn với HR**), location, level, salary, quantity, `ProFormDateRangePicker` → startDate/endDate (dayjs), isActive, description `ReactQuill`. `api.ts` thêm `callFetchJobsManage`, `callCreate/Update/DeleteJob`.
   - Tiêu chí đạt: build pass; HR tạo job không cần chọn company và chỉ thấy job công ty mình; ADMIN bắt buộc chọn company.
 
-- [ ] **T17: Admin Resumes**
+- [x] **T17: Admin Resumes**
   - Files: `src/pages/admin/Resume.tsx`, `src/config/api.ts`, `src/router.tsx`
   - Làm: ProTable cột email, job.name, company.name, status (Tag màu theo `RESUME_STATUS`), createdAt; search status. Nút "Xem" mở `Drawer`: link mở CV (`<a href={url} target="_blank" rel="noopener noreferrer">`), `Select` đổi status + nút Lưu (`callUpdateResumeStatus`, bọc `Access`), `Timeline` lịch sử `history`. Xoá bọc Access. `api.ts` thêm `callFetchResumes`, `callUpdateResumeStatus`, `callDeleteResume`.
   - Tiêu chí đạt: build pass; đổi status cập nhật bảng + timeline; HR không thấy nút Xoá.
