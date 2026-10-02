@@ -324,7 +324,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
     - `Register`: name, email, password, confirm (rule khớp) → `callRegister` → thông báo + chuyển `/login`.
   - Tiêu chí đạt: build pass; login/logout/register chạy với BE thật; F5 sau khi login vẫn giữ phiên (qua refresh cookie).
 
-- [ ] **T12: Admin layout + ProtectedRoute + Access**
+- [x] **T12: Admin layout + ProtectedRoute + Access**
   - Files: `src/layouts/AdminLayout.tsx`, `src/components/share/ProtectedRoute.tsx`, `src/components/share/Access.tsx`, `src/router.tsx`
   - Làm:
     - `ProtectedRoute({ admin?, children })`: `isLoading` → `Spin` toàn trang; chưa login → `<Navigate to={'/login?callback=' + pathname}>`; `admin && role.name === 'NORMAL_USER'` → `Result 403`.
