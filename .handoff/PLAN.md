@@ -198,7 +198,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
 
 ### Backend Core & Setup
 
-- [ ] **T1: Khởi tạo backend + core**
+- [x] **T1: Khởi tạo backend + core**
   - Files: `backend/**` (scaffold), `backend/.env.example`, `backend/nest-cli.json`, `backend/.gitignore`, `src/main.ts`, `src/app.module.ts`, `src/core/transform.interceptor.ts`, `src/core/base.schema.ts`, `src/core/soft-delete.plugin.ts`, `src/core/paginate.ts`, `src/decorator/customize.ts`
   - Làm:
     - Scaffold + cài deps đúng mục 2. Xoá `app.controller.ts`, `app.service.ts`, `app.controller.spec.ts` (và `test/` e2e nếu phụ thuộc chúng).

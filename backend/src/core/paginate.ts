@@ -1,16 +1,13 @@
-import { Type } from 'class-transformer';
 import { IsInt, IsOptional, Matches, Max, Min } from 'class-validator';
 import { FilterQuery, Model, PopulateOptions } from 'mongoose';
 
 export class PaginationQueryDto {
   @IsOptional()
-  @Type(() => Number)
   @IsInt()
   @Min(1)
   current: number = 1;
 
   @IsOptional()
-  @Type(() => Number)
   @IsInt()
   @Min(1)
   @Max(100)
@@ -22,7 +19,7 @@ export class PaginationQueryDto {
 }
 
 export function escapeRegex(text: string): string {
-  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 export interface PaginateResult<T> {
@@ -41,20 +38,19 @@ export async function paginate<T>(
   query: PaginationQueryDto,
   populate?: PopulateOptions | (PopulateOptions | string)[],
 ): Promise<PaginateResult<T>> {
-  const current = Number(query.current) || 1;
-  const pageSize = Number(query.pageSize) || 10;
+  const current = query.current;
+  const pageSize = query.pageSize;
   const skip = (current - 1) * pageSize;
   const sort = query.sort || '-createdAt';
 
+  let findQuery = model.find(filter).sort(sort).skip(skip).limit(pageSize);
+  if (populate) {
+    findQuery = findQuery.populate(populate as any);
+  }
+
   const [total, result] = await Promise.all([
     model.countDocuments(filter),
-    (async () => {
-      let q = model.find(filter).sort(sort).skip(skip).limit(pageSize);
-      if (populate) {
-        q = q.populate(populate as any);
-      }
-      return q.exec();
-    })(),
+    findQuery.exec(),
   ]);
 
   const pages = Math.ceil(total / pageSize);

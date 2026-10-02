@@ -3,5 +3,6 @@ dist/
 .env
 .env.*
 !.env.example
-public/images/*
-!public/images/.gitkeep
+public/images/**
+!public/images/**/
+!public/images/**/.gitkeep
