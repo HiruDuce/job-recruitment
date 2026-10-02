@@ -355,7 +355,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
   - Làm: cột logo (Avatar), name, address, createdAt; search name/address. `DrawerForm` rộng: name, address, logo (antd `Upload` `listType="picture-card"`, `customRequest` → `callUploadFile(file, 'company')`, chỉ ảnh, 1 file), description bằng `ReactQuill` (`react-quill-new` + `react-quill-new/dist/quill.snow.css`) trong `ProForm.Item`. `api.ts` thêm `callUploadFile(file, folder)` (FormData), `callCreate/Update/DeleteCompany`.
   - Tiêu chí đạt: build pass; upload logo hiển thị preview và lưu đúng url `/images/company/...`; sửa giữ nguyên nội dung description cũ.
 
-- [ ] **T16: Admin Jobs**
+- [x] **T16: Admin Jobs**
   - Files: `src/pages/admin/Job.tsx`, `src/config/api.ts`, `src/router.tsx`
   - Làm: ProTable gọi `GET /jobs/manage`; cột name, company.name, skills (Tag), location, level, salary (format `toLocaleString('vi-VN')` + đ), endDate, isActive; search name, location, level, isActive. `DrawerForm`: name, skills (`ProFormSelect mode="tags"` options `SKILLS`), company (`ProFormSelect`, **ẩn với HR**), location, level, salary, quantity, `ProFormDateRangePicker` → startDate/endDate (dayjs), isActive, description `ReactQuill`. `api.ts` thêm `callFetchJobsManage`, `callCreate/Update/DeleteJob`.
   - Tiêu chí đạt: build pass; HR tạo job không cần chọn company và chỉ thấy job công ty mình; ADMIN bắt buộc chọn company.

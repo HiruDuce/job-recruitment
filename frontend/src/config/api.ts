@@ -96,3 +96,20 @@ export const callUpdateCompany = (id: string, data: any): Promise<IBackendRes<IC
 export const callDeleteCompany = (id: string): Promise<IBackendRes<any>> => {
   return axios.delete(`/companies/${id}`);
 };
+
+// Jobs
+export const callFetchJobsManage = (params: any): Promise<IBackendRes<IModelPaginate<IJob>>> => {
+  return axios.get('/jobs/manage', { params });
+};
+
+export const callCreateJob = (data: any): Promise<IBackendRes<IJob>> => {
+  return axios.post('/jobs', data);
+};
+
+export const callUpdateJob = (id: string, data: any): Promise<IBackendRes<IJob>> => {
+  return axios.patch(`/jobs/${id}`, data);
+};
+
+export const callDeleteJob = (id: string): Promise<IBackendRes<any>> => {
+  return axios.delete(`/jobs/${id}`);
+};
