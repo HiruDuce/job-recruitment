@@ -5,6 +5,8 @@ import { AdminLayout } from './layouts/AdminLayout';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
 import { ProtectedRoute } from './components/share/ProtectedRoute';
+import { PermissionPage } from './pages/admin/Permission';
+import { RolePage } from './pages/admin/Role';
 
 const Placeholder = ({ name }: { name: string }) => (
   <div style={{ padding: 24, fontSize: 18 }}>
@@ -63,8 +65,8 @@ export const router = createBrowserRouter([
       { path: 'jobs', element: <Placeholder name="Quản lý việc làm" /> },
       { path: 'resumes', element: <Placeholder name="Quản lý CV ứng tuyển" /> },
       { path: 'users', element: <Placeholder name="Quản lý người dùng" /> },
-      { path: 'roles', element: <Placeholder name="Quản lý vai trò" /> },
-      { path: 'permissions', element: <Placeholder name="Quản lý quyền hạn" /> },
+      { path: 'roles', element: <RolePage /> },
+      { path: 'permissions', element: <PermissionPage /> },
     ],
   },
   {

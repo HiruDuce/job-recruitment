@@ -337,7 +337,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
 
 > Quy ước trang admin: `ProTable` với `request` gọi API paginate (map `params.current/pageSize` + filter từ `search`, trả `{ data: res.data.result, total: res.data.meta.total, success: true }`), `actionRef.current?.reload()` sau khi thêm/sửa/xoá; tạo/sửa bằng 1 `ModalForm`/`DrawerForm` dùng chung (có `initialValues` khi sửa); xoá bằng `Popconfirm`; nút Thêm/Sửa/Xoá bọc `<Access permission hideChildren>`; cả trang bọc `<Access permission={...GET list...}>`. Không tạo redux slice cho dữ liệu admin.
 
-- [ ] **T13: Admin Permissions + Roles**
+- [x] **T13: Admin Permissions + Roles**
   - Files: `src/pages/admin/Permission.tsx`, `src/pages/admin/Role.tsx`, `src/config/api.ts`, `src/router.tsx`
   - Làm:
     - Permission: cột name, apiPath, method (Tag màu), module, createdAt; search name/apiPath/method/module; form `ProFormText` name/apiPath, `ProFormSelect` method/module.

@@ -17,6 +17,36 @@ export const callLogout = (): Promise<IBackendRes<any>> => {
   return axios.post('/auth/logout');
 };
 
-export const callRefreshToken = (): Promise<IBackendRes<ILoginRes>> => {
-  return axios.get('/auth/refresh');
+// PERMISSIONS APIs
+export const callFetchPermissions = (params: any): Promise<IBackendRes<IModelPaginate<IPermission>>> => {
+  return axios.get('/permissions', { params });
+};
+
+export const callCreatePermission = (data: Partial<IPermission>): Promise<IBackendRes<{ _id: string }>> => {
+  return axios.post('/permissions', data);
+};
+
+export const callUpdatePermission = (id: string, data: Partial<IPermission>): Promise<IBackendRes<IPermission>> => {
+  return axios.patch(`/permissions/${id}`, data);
+};
+
+export const callDeletePermission = (id: string): Promise<IBackendRes<any>> => {
+  return axios.delete(`/permissions/${id}`);
+};
+
+// ROLES APIs
+export const callFetchRoles = (params: any): Promise<IBackendRes<IModelPaginate<IRole>>> => {
+  return axios.get('/roles', { params });
+};
+
+export const callCreateRole = (data: any): Promise<IBackendRes<{ _id: string }>> => {
+  return axios.post('/roles', data);
+};
+
+export const callUpdateRole = (id: string, data: any): Promise<IBackendRes<IRole>> => {
+  return axios.patch(`/roles/${id}`, data);
+};
+
+export const callDeleteRole = (id: string): Promise<IBackendRes<any>> => {
+  return axios.delete(`/roles/${id}`);
 };
