@@ -140,4 +140,8 @@ export const callFetchCompanyById = (id: string): Promise<IBackendRes<ICompany>>
   return axios.get(`/companies/${id}`);
 };
 
+export const callCreateResume = (data: { url: string; job: string }): Promise<IBackendRes<IResume>> => {
+  return axios.post('/resumes', data);
+};
+
 

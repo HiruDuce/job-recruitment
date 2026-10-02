@@ -13,6 +13,7 @@ import { JobPage } from './pages/admin/Job';
 import { ResumePage } from './pages/admin/Resume';
 import { Home } from './pages/client/Home';
 import { JobList } from './pages/client/JobList';
+import { JobDetail } from './pages/client/JobDetail';
 
 const Placeholder = ({ name }: { name: string }) => (
   <div style={{ padding: 24, fontSize: 18 }}>
@@ -37,7 +38,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: 'job', element: <JobList /> },
-      { path: 'job/:id', element: <Placeholder name="Chi tiết việc làm" /> },
+      { path: 'job/:id', element: <JobDetail /> },
       { path: 'company', element: <Placeholder name="Danh sách công ty" /> },
       { path: 'company/:id', element: <Placeholder name="Chi tiết công ty" /> },
       {
