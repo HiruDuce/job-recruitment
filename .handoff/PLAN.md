@@ -268,7 +268,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
 
 ### Backend Business Modules
 
-- [ ] **T7: Module companies**
+- [x] **T7: Module companies**
   - Files: `src/companies/**`, `src/app.module.ts`
   - Làm: schema như mục 5; DTO `name`, `address`, `description` (`@IsString`), `logo` (`@Matches(/^\/images\/company\//)`); Query: name, address (regex). `GET /` + `GET /:id` `@Public`; `POST`, `PATCH /:id`, `DELETE /:id` RBAC. `GET /:id` không thấy → 404. Export `CompaniesService`.
   - Tiêu chí đạt: build pass; khách xem list/chi tiết không cần token; HR gọi POST → 403.
