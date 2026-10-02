@@ -249,7 +249,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
     - Controller dùng `@Res({ passthrough: true })`; login `@Public() @UseGuards(LocalAuthGuard)`; register/refresh `@Public`; logout `@SkipPermission`.
   - Tiêu chí đạt: build pass; `npm test` pass; gọi route R không token → 401, có token nhưng thiếu permission → 403; refresh cấp token mới và token refresh cũ dùng lại → 401; cookie có cờ httpOnly.
 
-- [ ] **T5: Seed dữ liệu (databases module)**
+- [x] **T5: Seed dữ liệu (databases module)**
   - Files: `src/databases/**`, `src/app.module.ts`
   - Làm:
     - `seed-data.ts`: mảng `INIT_PERMISSIONS` đúng toàn bộ các dòng **R** ở mục 6 (`name` tiếng Việt, `apiPath` đầy đủ prefix `/api/v1/...`, `method`, `module`).
