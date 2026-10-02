@@ -365,7 +365,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
   - Làm: ProTable cột email, job.name, company.name, status (Tag màu theo `RESUME_STATUS`), createdAt; search status. Nút "Xem" mở `Drawer`: link mở CV (`<a href={url} target="_blank" rel="noopener noreferrer">`), `Select` đổi status + nút Lưu (`callUpdateResumeStatus`, bọc `Access`), `Timeline` lịch sử `history`. Xoá bọc Access. `api.ts` thêm `callFetchResumes`, `callUpdateResumeStatus`, `callDeleteResume`.
   - Tiêu chí đạt: build pass; đổi status cập nhật bảng + timeline; HR không thấy nút Xoá.
 
-- [ ] **T18: Client Home + danh sách việc làm**
+- [x] **T18: Client Home + danh sách việc làm**
   - Files: `src/pages/client/Home.tsx`, `src/pages/client/JobList.tsx`, `src/components/client/JobCard.tsx`, `src/components/client/SearchBar.tsx`, `src/components/client/*.module.scss`, `src/config/api.ts`, `src/router.tsx`
   - Làm:
     - `SearchBar`: `Select mode="multiple"` skills (`SKILLS`) + `Select` location + nút Tìm → `navigate('/job?skills=REACT,NODEJS&location=HANOI')`.

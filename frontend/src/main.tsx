@@ -7,11 +7,13 @@ import { ConfigProvider } from 'antd';
 import viVN from 'antd/locale/vi_VN';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { store } from './redux/store';
 import { injectStore, refreshToken } from './config/axios-customize';
 import { router } from './router';
 
+dayjs.extend(relativeTime);
 dayjs.locale('vi');
 injectStore(store);
 

@@ -127,3 +127,17 @@ export const callDeleteResume = (id: string): Promise<IBackendRes<any>> => {
   return axios.delete(`/resumes/${id}`);
 };
 
+// Public Jobs & Companies
+export const callFetchJobs = (params?: any): Promise<IBackendRes<IModelPaginate<IJob>>> => {
+  return axios.get('/jobs', { params });
+};
+
+export const callFetchJobById = (id: string): Promise<IBackendRes<IJob>> => {
+  return axios.get(`/jobs/${id}`);
+};
+
+export const callFetchCompanyById = (id: string): Promise<IBackendRes<ICompany>> => {
+  return axios.get(`/companies/${id}`);
+};
+
+
