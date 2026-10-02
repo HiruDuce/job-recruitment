@@ -380,7 +380,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
   - Làm: thông tin job + công ty (link `/company/:id`); description render `dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(job.description) }}`. Nút "Ứng tuyển": chưa login → `navigate('/login?callback=/job/' + id)`; đã login → `Modal` với `Upload.Dragger` (accept `.pdf`, chặn > 5MB ở `beforeUpload`) → `callUploadFile(file, 'resume')` → `callCreateResume({ url, job: id })` → `message.success`. Lỗi BE (đã nộp, 403…) hiển thị message. `api.ts` thêm `callCreateResume`.
   - Tiêu chí đạt: build pass; HTML chứa `<script>`/`onerror` không thực thi; nộp lần 2 hiện lỗi "đã ứng tuyển".
 
-- [ ] **T20: Client công ty + trang tài khoản**
+- [x] **T20: Client công ty + trang tài khoản**
   - Files: `src/pages/client/CompanyList.tsx`, `src/pages/client/CompanyDetail.tsx`, `src/pages/client/Account.tsx`, `src/config/api.ts`, `src/router.tsx`
   - Làm:
     - `CompanyList`: grid card (logo, tên, địa chỉ) + tìm theo tên + `Pagination`.

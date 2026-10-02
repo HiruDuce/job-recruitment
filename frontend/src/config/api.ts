@@ -144,4 +144,8 @@ export const callCreateResume = (data: { url: string; job: string }): Promise<IB
   return axios.post('/resumes', data);
 };
 
+export const callFetchMyResumes = (): Promise<IBackendRes<IResume[]>> => {
+  return axios.get('/resumes/me');
+};
+
 
