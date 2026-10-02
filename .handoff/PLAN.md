@@ -299,7 +299,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
 
 ### Frontend Base & Layout
 
-- [ ] **T10: Khởi tạo frontend + Redux + Axios mutex**
+- [x] **T10: Khởi tạo frontend + Redux + Axios mutex**
   - Files: `frontend/**` (scaffold), `vite.config.ts`, `src/main.tsx`, `src/router.tsx`, `src/config/axios-customize.ts`, `src/config/api.ts`, `src/config/constants.ts`, `src/redux/store.ts`, `src/redux/hooks.ts`, `src/redux/slice/accountSlice.ts`, `src/types/backend.d.ts`
   - Làm:
     - Scaffold + deps mục 2; xoá `App.tsx`, `App.css`, asset demo.
