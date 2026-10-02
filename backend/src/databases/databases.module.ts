@@ -11,6 +11,8 @@ import {
   Company,
   CompanySchema,
 } from '../companies/schemas/company.schema';
+import { Job, JobSchema } from '../jobs/schemas/job.schema';
+import { Resume, ResumeSchema } from '../resumes/schemas/resume.schema';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import {
       { name: Role.name, schema: RoleSchema },
       { name: User.name, schema: UserSchema },
       { name: Company.name, schema: CompanySchema },
+      { name: Job.name, schema: JobSchema },
+      { name: Resume.name, schema: ResumeSchema },
     ]),
   ],
   providers: [DatabasesService],
