@@ -32,9 +32,9 @@ export interface PaginateResult<T> {
   result: T[];
 }
 
-export async function paginate<T>(
-  model: Model<T>,
-  filter: FilterQuery<T>,
+export async function paginate<T = any>(
+  model: Model<any>,
+  filter: FilterQuery<any>,
   query: PaginationQueryDto,
   populate?: PopulateOptions | (PopulateOptions | string)[],
 ): Promise<PaginateResult<T>> {

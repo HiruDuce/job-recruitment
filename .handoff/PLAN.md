@@ -214,7 +214,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
     - `customize.ts`: `IS_PUBLIC_KEY`/`Public()`, `SKIP_PERMISSION_KEY`/`SkipPermission()`, `RESPONSE_MESSAGE`/`ResponseMessage(msg)`, `User()` (createParamDecorator → `req.user`), `interface IUser { _id: string; name: string; email: string; role: { _id: string; name: string }; company?: string; permissions?: { method: string; apiPath: string }[] }`.
   - Tiêu chí đạt: `npm run build` pass; `npm run start:dev` kết nối Mongo không lỗi; `/swagger` mở được; không còn file sample của scaffold; plugin soft-delete không dùng thư viện ngoài.
 
-- [ ] **T2: Module permissions + roles**
+- [x] **T2: Module permissions + roles**
   - Files: `src/permissions/**`, `src/roles/**`, `src/app.module.ts`
   - Làm:
     - `Permission` schema + DTO `CreatePermissionDto` (`name`, `apiPath` `@Matches(/^\/api\/v1\//)`, `method` `@IsIn(['GET','POST','PATCH','DELETE'])`, `module` `@IsString`), `UpdatePermissionDto = PartialType(...)` (từ `@nestjs/swagger`), `QueryPermissionDto extends PaginationQueryDto` (name, apiPath, method, module).

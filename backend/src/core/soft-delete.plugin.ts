@@ -13,8 +13,8 @@ export function softDeletePlugin(schema: Schema) {
   schema.pre(['find', 'findOne', 'findOneAndUpdate', 'countDocuments', 'updateOne', 'updateMany'], filterNonDeleted);
 }
 
-export async function softDelete<T>(
-  model: Model<T>,
+export async function softDelete(
+  model: Model<any>,
   id: string,
   user?: IUser,
 ): Promise<{ matchedCount: number; modifiedCount: number }> {

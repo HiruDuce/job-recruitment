@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { softDeletePlugin } from './core/soft-delete.plugin';
+import { PermissionsModule } from './permissions/permissions.module';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
@@ -10,15 +12,23 @@ import { softDeletePlugin } from './core/soft-delete.plugin';
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGODB_URI') || 'mongodb://localhost:27017/itjobs',
-        connectionFactory: (conn) => {
-          conn.plugin(softDeletePlugin);
-          return conn;
-        },
-      }),
+      useFactory: async (configService: ConfigService) => {
+        const uri = configService.get<string>('MONGODB_URI');
+        if (!uri) {
+          throw new Error('MONGODB_URI is not defined in environment variables');
+        }
+        return {
+          uri,
+          connectionFactory: (conn) => {
+            conn.plugin(softDeletePlugin);
+            return conn;
+          },
+        };
+      },
       inject: [ConfigService],
     }),
+    PermissionsModule,
+    RolesModule,
   ],
 })
 export class AppModule {}
