@@ -5,6 +5,7 @@ import { useAppSelector } from '../../redux/hooks';
 interface IPermissionCheck {
   method: string;
   apiPath: string;
+  module?: string;
 }
 
 interface IProps {

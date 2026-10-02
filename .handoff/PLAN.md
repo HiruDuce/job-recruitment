@@ -350,7 +350,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
   - Làm: cột name, email, role.name, company.name, createdAt; search name/email. Form: name, email, password (chỉ khi tạo), `ProFormSelect` role (request `callFetchRoles`), `ProFormSelect` company (request `callFetchCompanies`, chỉ hiện & bắt buộc khi role được chọn là HR — dùng `ProFormDependency`). `api.ts` thêm `callFetchUsers/Create/Update/Delete`, `callFetchCompanies`.
   - Tiêu chí đạt: build pass; tạo HR không chọn company bị chặn ở form; sửa user không gửi password.
 
-- [ ] **T15: Admin Companies**
+- [x] **T15: Admin Companies**
   - Files: `src/pages/admin/Company.tsx`, `src/config/api.ts`, `src/router.tsx`
   - Làm: cột logo (Avatar), name, address, createdAt; search name/address. `DrawerForm` rộng: name, address, logo (antd `Upload` `listType="picture-card"`, `customRequest` → `callUploadFile(file, 'company')`, chỉ ảnh, 1 file), description bằng `ReactQuill` (`react-quill-new` + `react-quill-new/dist/quill.snow.css`) trong `ProForm.Item`. `api.ts` thêm `callUploadFile(file, folder)` (FormData), `callCreate/Update/DeleteCompany`.
   - Tiêu chí đạt: build pass; upload logo hiển thị preview và lưu đúng url `/images/company/...`; sửa giữ nguyên nội dung description cũ.

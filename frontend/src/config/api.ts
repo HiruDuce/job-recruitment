@@ -68,7 +68,31 @@ export const callDeleteUser = (id: string): Promise<IBackendRes<any>> => {
   return axios.delete(`/users/${id}`);
 };
 
+// Files
+export const callUploadFile = (file: File, folder: string): Promise<IBackendRes<{ url: string }>> => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('folder', folder);
+  return axios.post('/files/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
 // Companies
 export const callFetchCompanies = (params?: any): Promise<IBackendRes<IModelPaginate<ICompany>>> => {
   return axios.get('/companies', { params });
+};
+
+export const callCreateCompany = (data: any): Promise<IBackendRes<ICompany>> => {
+  return axios.post('/companies', data);
+};
+
+export const callUpdateCompany = (id: string, data: any): Promise<IBackendRes<ICompany>> => {
+  return axios.patch(`/companies/${id}`, data);
+};
+
+export const callDeleteCompany = (id: string): Promise<IBackendRes<any>> => {
+  return axios.delete(`/companies/${id}`);
 };
