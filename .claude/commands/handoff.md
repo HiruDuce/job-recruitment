@@ -23,6 +23,7 @@ Bất kể website thuộc nghiệp vụ gì, bạn BẮT BUỘC phải tổ ch�
 2. **Cấu trúc core/ chung:**
    - `core/transform.interceptor.ts`: Tự động bọc mọi response trả về theo chuẩn: `{ statusCode, message, data: { ... } }`.
    - `core/base.schema.ts`: Chứa trường audit: `createdAt`, `updatedAt`, `createdBy`, `updatedBy`, `isDeleted`, `deletedBy`.
+   - `core/soft-delete.plugin.ts`: Tự viết plugin soft-delete gọn gàng (~15 dòng), KHÔNG dùng plugin bên thứ 3 cũ.
    - `core/paginate.ts`: Helper phân trang chuẩn `{ meta: { current, pageSize, pages, total }, result: [...] }`.
    - `decorator/customize.ts`: Các custom decorator:
      + `@Public()`: Đánh dấu API công khai, bỏ qua JWT Guard.
@@ -40,11 +41,11 @@ Bất kể website thuộc nghiệp vụ gì, bạn BẮT BUỘC phải tổ ch�
      + Mỗi permission lưu cặp `(method, api_path)`.
      + Guard tự động đối chiếu `req.method` và `req.route.path` của API đang gọi với danh sách permissions trong role của user.
 4. **Các module nền tảng khác:**
-   - Module `files`: Upload file qua Multer (kiểm tra dung lượng và mime type).
+   - Module `files`: Upload file qua Multer (kiểm tra dung lượng và mime type, thiết kế interface để sẵn sàng cắm Cloud Storage S3/R2).
    - Module `mail`: Gửi email template tự động (Handlebars).
 
 ### C. Chuẩn kiến trúc Frontend (React + Vite + Ant Design):
-1. **Core & Tooling:** Vite + React (v18/19) + TypeScript + SCSS Modules.
+1. **Core & Tooling:** Vite + React + TypeScript + SCSS Modules.
 2. **UI Framework:** Ant Design 5.x.
    - Trang Admin: Bắt buộc dùng `@ant-design/pro-components` (`ProTable`, `ProForm`, `ModalForm`, `DrawerForm`) để CRUD cực nhanh và chuẩn UX.
    - Trang Client: Giao diện người dùng responsive, đẹp mắt, thân thiện.
@@ -62,12 +63,47 @@ Bất kể website thuộc nghiệp vụ gì, bạn BẮT BUỘC phải tổ ch�
 
 ---
 
-## 2. QUY TRÌNH TECH LEAD LÊN PLAN
+## 2. QUY CHUẨN THƯ VIỆN & PHIÊN BẢN (LIBRARY CONSTRAINTS & MODERN STACK)
+Tech Lead BẮT BUỘC phải chọn đúng danh sách thư viện dưới đây khi lên dependencies trong PLAN.md, đảm bảo hệ thống bền vững lâu dài:
+
+### A. Backend Dependencies:
+- **Core:** `@nestjs/common`, `@nestjs/core`, `@nestjs/platform-express` (NestJS bản 10 hoặc mới nhất). Khuyến khích dùng SWC compiler (`nest start -b swc`).
+- **Database:** `mongoose` (v8+) + `@nestjs/mongoose`.
+  - ⚠️ **CẤM CÀI:** `soft-delete-plugin-mongoose` (thư viện cũ gây lỗi type/hook). BẮT BUỘC tự viết helper soft-delete trong `core/soft-delete.plugin.ts`.
+- **Validation:** `class-validator`, `class-transformer`.
+- **Authentication & Security:** `passport`, `passport-jwt`, `passport-local`, `@nestjs/passport`, `@nestjs/jwt`, `cookie-parser`, `helmet`.
+  - Khuyến khích dùng `@node-rs/bcrypt` hoặc `bcryptjs` v3 (đã có sẵn types).
+- **API Docs:** `@nestjs/swagger` + `swagger-ui-express`.
+- **Thư viện thừa KHÔNG CẦN CÀI Ở BE:**
+  - Không cài `dotenv` (dùng `@nestjs/config` đã tích hợp sẵn).
+  - Không cài `@types/bcryptjs` nếu dùng bcryptjs 3 / @node-rs/bcrypt.
+  - Không cài `@types/cron` (`@nestjs/schedule` đã có sẵn).
+
+### B. Frontend Dependencies:
+- **Core:** `react` (v18 hoặc v19), `react-dom`, `vite` + `@vitejs/plugin-react-swc`, `typescript`.
+  - *(Nếu dùng React 19: Bắt buộc cài kèm `@ant-design/v5-patch-for-react-19` để Antd 5 chạy mượt)*.
+- **UI Framework:** `antd` (v5.x mới nhất), `@ant-design/pro-components` (v2.x), `@ant-design/icons`.
+  - ⚠️ **LƯU Ý:** Giữ `antd` ở v5, KHÔNG nâng lên Antd 6 vì Pro-components hiện chỉ hỗ trợ tốt nhất trên antd 5.
+- **Rich Text Editor:**
+  - ⚠️ **CẤM DÙNG `react-quill`** (đã ngừng bảo trì và crash trên React 19).
+  - BẮT BUỘC DÙNG: **`react-quill-new`** (bản fork tương thích 100%) hoặc **`@tiptap/react`** (chuẩn editor hiện đại nhất cho React).
+- **Routing:** `react-router` / `react-router-dom`.
+- **State Management:** `@reduxjs/toolkit` (v2.x) + `react-redux` (v9.x).
+- **HTTP & Concurrency:** `axios`, `async-mutex` (xử lý concurrency refresh token).
+- **Date & Utility:** `dayjs`, `lodash` (hoặc `lodash-es`).
+- **Thư viện thừa KHÔNG CẦN CÀI Ở FE:**
+  - Không cài `uuid` (dùng `crypto.randomUUID()` có sẵn trong trình duyệt).
+  - Không cài `dotenv` (Vite tự load qua `import.meta.env`).
+  - Không cài `@types/react-router-dom` lệch version.
+
+---
+
+## 3. QUY TRÌNH TECH LEAD LÊN PLAN
 1. Phân tích yêu cầu website mới của user: Xác định các vai trò (Client, Admin, v.v.), các luồng nghiệp vụ chính, và các thực thể dữ liệu (Entities/Collections).
-2. Lập cấu trúc module nghiệp vụ mới nhưng ÁP DỤNG 100% CẤU TRÚC KIẾN TRÚC Ở MỤC 1.
+2. Lập cấu trúc module nghiệp vụ mới nhưng ÁP DỤNG 100% CẤU TRÚC KIẾN TRÚC Ở MỤC 1 VÀ QUY CHUẨN THƯ VIỆN Ở MỤC 2.
 3. Ghi đè vào `.handoff/PLAN.md` theo format chuẩn:
    - Mục tiêu & phạm vi
-   - Giả định (Dependencies, versions)
+   - Giả định (Dependencies, versions sạch và hiện đại)
    - Kiến trúc (Cây thư mục BE và FE)
    - Flow (Mermaid diagram luồng người dùng)
    - Data model (Các schema & quan hệ)
