@@ -315,7 +315,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
     - `router.tsx` (`createBrowserRouter` từ `react-router`): khai báo đủ route mục Kiến trúc, tạm trỏ tới component placeholder `<div>` cho trang chưa làm.
   - Tiêu chí đạt: `npm run build` pass; không lưu access token vào localStorage; 3 request 401 đồng thời chỉ gây **1** lần gọi `/auth/refresh` (mutex + so token cũ).
 
-- [ ] **T11: Client layout + Login/Register**
+- [x] **T11: Client layout + Login/Register**
   - Files: `src/layouts/ClientLayout.tsx`, `src/components/client/Header.tsx`, `src/components/client/Footer.tsx`, `src/components/client/*.module.scss`, `src/pages/auth/Login.tsx`, `src/pages/auth/Register.tsx`, `src/router.tsx`
   - Làm:
     - `ClientLayout`: Header + `<Outlet/>` + Footer, responsive (Header gập menu thành Drawer ở mobile).

@@ -1,4 +1,7 @@
 import { createBrowserRouter } from 'react-router';
+import { ClientLayout } from './layouts/ClientLayout';
+import { Login } from './pages/auth/Login';
+import { Register } from './pages/auth/Register';
 
 const Placeholder = ({ name }: { name: string }) => (
   <div style={{ padding: 24, fontSize: 18 }}>
@@ -10,7 +13,7 @@ const Placeholder = ({ name }: { name: string }) => (
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <Placeholder name="Client Layout" />,
+    element: <ClientLayout />,
     children: [
       { index: true, element: <Placeholder name="Trang chủ" /> },
       { path: 'job', element: <Placeholder name="Danh sách việc làm" /> },
@@ -22,11 +25,11 @@ export const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <Placeholder name="Đăng nhập" />,
+    element: <Login />,
   },
   {
     path: '/register',
-    element: <Placeholder name="Đăng ký" />,
+    element: <Register />,
   },
   {
     path: '/admin',
