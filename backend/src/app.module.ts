@@ -5,6 +5,7 @@ import { softDeletePlugin } from './core/soft-delete.plugin';
 import { PermissionsModule } from './permissions/permissions.module';
 import { RolesModule } from './roles/roles.module';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { UsersModule } from './users/users.module';
     PermissionsModule,
     RolesModule,
     UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

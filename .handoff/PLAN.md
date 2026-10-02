@@ -234,7 +234,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
     - Export `UsersService`.
   - Tiêu chí đạt: build pass; tạo user lưu password đã hash; GET list không lộ password/refreshToken.
 
-- [ ] **T4: Auth (Local + JWT + Refresh cookie + Dynamic RBAC guard)**
+- [x] **T4: Auth (Local + JWT + Refresh cookie + Dynamic RBAC guard)**
   - Files: `src/auth/**`, `src/app.module.ts`, `src/main.ts` (nếu cần)
   - Làm:
     - `AuthModule` import `UsersModule`, `RolesModule`, `PassportModule`, `JwtModule.registerAsync` (secret `JWT_ACCESS_SECRET`, `expiresIn: Number(JWT_ACCESS_EXPIRE)`). Đăng ký `JwtAuthGuard` làm `APP_GUARD`.
