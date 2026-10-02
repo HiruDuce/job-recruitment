@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Cập nhật trạng thái hồ sơ ứng tuyển</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333333;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+    }
+    .header {
+      background-color: #1677ff;
+      color: white;
+      padding: 15px;
+      border-radius: 6px 6px 0 0;
+      text-align: center;
+    }
+    .content {
+      padding: 20px 0;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      background-color: #f0f5ff;
+      color: #1677ff;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .footer {
+      font-size: 12px;
+      color: #888888;
+      border-top: 1px solid #eeeeee;
+      padding-top: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>Thông Báo Tuyển Dụng - ITJobs</h2>
+    </div>
+    <div class="content">
+      <p>Xin chào <strong>{{candidateName}}</strong>,</p>
+      <p>
+        Hồ sơ ứng tuyển của bạn cho vị trí <strong>{{jobName}}</strong> tại công ty <strong>{{companyName}}</strong> vừa được cập nhật trạng thái mới:
+      </p>
+      <p style="text-align: center; margin: 25px 0;">
+        <span class="status-badge">{{status}}</span>
+      </p>
+      <p>
+        Bạn có thể đăng nhập vào hệ thống ITJobs để theo dõi chi tiết quá trình ứng tuyển.
+      </p>
+      <p>Chúc bạn một ngày làm việc hiệu quả và nhiều may mắn!</p>
+    </div>
+    <div class="footer">
+      <p>Đây là email tự động từ hệ thống ITJobs, vui lòng không trả lời trực tiếp email này.</p>
+    </div>
+  </div>
+</body>
+</html>

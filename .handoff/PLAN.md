@@ -257,7 +257,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
     - Import model trực tiếp bằng `MongooseModule.forFeature` (không cần controller).
   - Tiêu chí đạt: build pass; DB trống + `SHOULD_INIT=true` → khởi động tạo đủ dữ liệu; khởi động lại không tạo trùng; login admin gọi được mọi route R.
 
-- [ ] **T6: Module files + mail**
+- [x] **T6: Module files + mail**
   - Files: `src/files/**`, `src/mail/**`, `src/app.module.ts`
   - Làm:
     - `storage.service.ts`: `export abstract class StorageService { abstract save(file: Express.Multer.File, folder: string): Promise<string> }` + `LocalStorageService` ghi `buffer` vào `public/images/<folder>/<crypto.randomUUID()><ext>` (ext lấy theo **mimetype** map `{ 'image/jpeg': '.jpg', 'image/png': '.png', 'image/webp': '.webp', 'application/pdf': '.pdf' }`, KHÔNG dùng tên file gốc), `mkdir recursive`, trả `/images/<folder>/<file>`. Module provide `{ provide: StorageService, useClass: LocalStorageService }` (đổi sang S3/R2 chỉ cần class mới).
