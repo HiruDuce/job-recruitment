@@ -7,6 +7,7 @@ import { Register } from './pages/auth/Register';
 import { ProtectedRoute } from './components/share/ProtectedRoute';
 import { PermissionPage } from './pages/admin/Permission';
 import { RolePage } from './pages/admin/Role';
+import { UserPage } from './pages/admin/User';
 
 const Placeholder = ({ name }: { name: string }) => (
   <div style={{ padding: 24, fontSize: 18 }}>
@@ -64,7 +65,7 @@ export const router = createBrowserRouter([
       { path: 'companies', element: <Placeholder name="Quản lý công ty" /> },
       { path: 'jobs', element: <Placeholder name="Quản lý việc làm" /> },
       { path: 'resumes', element: <Placeholder name="Quản lý CV ứng tuyển" /> },
-      { path: 'users', element: <Placeholder name="Quản lý người dùng" /> },
+      { path: 'users', element: <UserPage /> },
       { path: 'roles', element: <RolePage /> },
       { path: 'permissions', element: <PermissionPage /> },
     ],

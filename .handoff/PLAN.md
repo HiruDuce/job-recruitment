@@ -345,7 +345,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
     - `api.ts`: `callFetchPermissions/Create/Update/Delete`, `callFetchRoles/Create/Update/Delete`.
   - Tiêu chí đạt: build pass; tạo role gán permission rồi user role đó login lại thấy quyền mới có hiệu lực.
 
-- [ ] **T14: Admin Users**
+- [x] **T14: Admin Users**
   - Files: `src/pages/admin/User.tsx`, `src/config/api.ts`, `src/router.tsx`
   - Làm: cột name, email, role.name, company.name, createdAt; search name/email. Form: name, email, password (chỉ khi tạo), `ProFormSelect` role (request `callFetchRoles`), `ProFormSelect` company (request `callFetchCompanies`, chỉ hiện & bắt buộc khi role được chọn là HR — dùng `ProFormDependency`). `api.ts` thêm `callFetchUsers/Create/Update/Delete`, `callFetchCompanies`.
   - Tiêu chí đạt: build pass; tạo HR không chọn company bị chặn ở form; sửa user không gửi password.

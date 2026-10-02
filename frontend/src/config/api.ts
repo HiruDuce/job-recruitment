@@ -50,3 +50,25 @@ export const callUpdateRole = (id: string, data: any): Promise<IBackendRes<IRole
 export const callDeleteRole = (id: string): Promise<IBackendRes<any>> => {
   return axios.delete(`/roles/${id}`);
 };
+
+// Users
+export const callFetchUsers = (params: any): Promise<IBackendRes<IModelPaginate<IUser>>> => {
+  return axios.get('/users', { params });
+};
+
+export const callCreateUser = (data: any): Promise<IBackendRes<IUser>> => {
+  return axios.post('/users', data);
+};
+
+export const callUpdateUser = (id: string, data: any): Promise<IBackendRes<IUser>> => {
+  return axios.patch(`/users/${id}`, data);
+};
+
+export const callDeleteUser = (id: string): Promise<IBackendRes<any>> => {
+  return axios.delete(`/users/${id}`);
+};
+
+// Companies
+export const callFetchCompanies = (params?: any): Promise<IBackendRes<IModelPaginate<ICompany>>> => {
+  return axios.get('/companies', { params });
+};
