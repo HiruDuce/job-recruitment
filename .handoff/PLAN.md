@@ -273,7 +273,7 @@ Lưu ý thứ tự route: khai báo `@Get('manage')` / `@Get('me')` **trước**
   - Làm: schema như mục 5; DTO `name`, `address`, `description` (`@IsString`), `logo` (`@Matches(/^\/images\/company\//)`); Query: name, address (regex). `GET /` + `GET /:id` `@Public`; `POST`, `PATCH /:id`, `DELETE /:id` RBAC. `GET /:id` không thấy → 404. Export `CompaniesService`.
   - Tiêu chí đạt: build pass; khách xem list/chi tiết không cần token; HR gọi POST → 403.
 
-- [ ] **T8: Module jobs**
+- [x] **T8: Module jobs**
   - Files: `src/jobs/**`, `src/app.module.ts`
   - Làm:
     - Schema như mục 5. DTO: `name`, `skills` (`@ArrayNotEmpty @IsString({each})`, Transform UPPERCASE), `company?` `@IsMongoId`, `location`, `salary` `@Min(0)`, `quantity` `@Min(1)`, `level` `@IsIn(LEVELS)`, `description`, `startDate`/`endDate` `@Type(() => Date) @IsDate`, `isActive?`. `UpdateJobDto = PartialType`.
