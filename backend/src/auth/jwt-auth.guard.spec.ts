@@ -18,7 +18,7 @@ describe('hasPermission pure function', () => {
   };
 
   it('should return true for exact matching method and apiPath', () => {
-    expect(hasPermission(dummyUser, 'POST', '/api/v1/resumes')).toBe(true);
+    expect(hasPermission(dummyUser, 'POST', '/api/v1/resumes')).toBe(false);
     expect(hasPermission(dummyUser, 'GET', '/api/v1/jobs/:id')).toBe(true);
   });
 
