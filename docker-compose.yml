@@ -1,0 +1,27 @@
+name: itjobs
+
+services:
+  mongo:
+    image: mongo:7
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build: ./backend
+    env_file: ./backend/.env
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/itjobs
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:
