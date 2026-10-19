@@ -1,0 +1,16 @@
+{
+    "rewrites": [
+        {
+            "source": "/api/:path*",
+            "destination": "https://job-recruitment-5m6p.onrender.com/api/:path*"
+        },
+        {
+            "source": "/images/:path*",
+            "destination": "https://job-recruitment-5m6p.onrender.com/images/:path*"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ]
+}
