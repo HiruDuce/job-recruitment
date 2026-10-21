@@ -17,6 +17,8 @@ import { Redis } from 'ioredis';
 const redis = process.env.REDIS_URL
   ? new Redis(process.env.REDIS_URL, { maxRetriesPerRequest: 1 })
   : null;
+redis?.on('error', () => { }); // ponytail: bỏ qua lỗi kết nối vì cache tự rơi về MongoDB; thêm log nếu cần theo dõi Redis
+
 const CACHE_TTL = 60;
 
 @Injectable()
