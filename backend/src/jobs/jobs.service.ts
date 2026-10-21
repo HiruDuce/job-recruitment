@@ -11,13 +11,20 @@ import { IUser } from '../decorator/customize';
 import { escapeRegex, paginate } from '../core/paginate';
 import { softDelete } from '../core/soft-delete.plugin';
 import { HR_ROLE } from '../roles/schemas/role.schema';
+import { Redis } from 'ioredis';
+
+// ponytail: cache theo TTL 60s, không xoá khi sửa job → job mới hiện chậm tối đa 60s; xoá key trong create/update/remove nếu cần tức thì
+const redis = process.env.REDIS_URL
+  ? new Redis(process.env.REDIS_URL, { maxRetriesPerRequest: 1 })
+  : null;
+const CACHE_TTL = 60;
 
 @Injectable()
 export class JobsService {
   constructor(
     @InjectModel(Job.name)
     private jobModel: Model<JobDocument>,
-  ) {}
+  ) { }
 
   private scope(user: IUser): Record<string, any> {
     if (user?.role?.name === HR_ROLE) {
@@ -52,14 +59,20 @@ export class JobsService {
   }
 
   async findPublic(query: QueryJobDto) {
+    const key = `jobs:public:${JSON.stringify(query)}`;
+    const cached = await redis?.get(key).catch(() => null);
+    if (cached) return JSON.parse(cached);
+
     const filter = this.buildFilter(query);
     filter.isActive = true;
     filter.endDate = { $gte: new Date() };
 
-    return paginate(this.jobModel, filter, query, {
+    const result = await paginate(this.jobModel, filter, query, {
       path: 'company',
       select: '_id name logo',
     });
+    await redis?.set(key, JSON.stringify(result), 'EX', CACHE_TTL).catch(() => null);
+    return result;
   }
 
   async findManage(query: QueryJobDto, user: IUser) {
