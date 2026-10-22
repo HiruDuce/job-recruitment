@@ -11,13 +11,9 @@ import { IUser } from '../decorator/customize';
 import { escapeRegex, paginate } from '../core/paginate';
 import { softDelete } from '../core/soft-delete.plugin';
 import { HR_ROLE } from '../roles/schemas/role.schema';
-import { Redis } from 'ioredis';
+import { redis } from '../core/redis';
 
 // ponytail: cache theo TTL 60s, không xoá khi sửa job → job mới hiện chậm tối đa 60s; xoá key trong create/update/remove nếu cần tức thì
-const redis = process.env.REDIS_URL
-  ? new Redis(process.env.REDIS_URL, { maxRetriesPerRequest: 1 })
-  : null;
-redis?.on('error', () => { }); // ponytail: bỏ qua lỗi kết nối vì cache tự rơi về MongoDB; thêm log nếu cần theo dõi Redis
 
 const CACHE_TTL = 60;
 
