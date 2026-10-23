@@ -1,5 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 import * as nodemailer from 'nodemailer';
 import * as Handlebars from 'handlebars';
 import * as fs from 'fs';
@@ -10,7 +12,10 @@ export class MailService {
   private readonly logger = new Logger(MailService.name);
   private transporter: nodemailer.Transporter;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    @InjectQueue('mail') private mailQueue: Queue,
+  ) {
     const host = this.configService.get<string>('MAIL_HOST') || 'localhost';
     const port = Number(this.configService.get<number>('MAIL_PORT') || 1025);
     const user = this.configService.get<string>('MAIL_USER');
@@ -26,6 +31,7 @@ export class MailService {
     });
   }
 
+  // Ghi việc gửi email vào hàng đợi; worker (mail.processor.ts) sẽ gửi và tự thử lại khi lỗi
   async send(
     to: string,
     subject: string,
@@ -33,33 +39,37 @@ export class MailService {
     context: Record<string, any>,
   ): Promise<void> {
     try {
-      const templatePath = path.join(
-        __dirname,
-        'templates',
-        `${template}.hbs`,
+      await this.mailQueue.add(
+        'send',
+        { to, subject, template, context },
+        {
+          attempts: 5,
+          backoff: { type: 'exponential', delay: 5000 },
+          removeOnComplete: true,
+        },
       );
-
-      const templateContent = await fs.promises.readFile(templatePath, 'utf-8');
-      const compiled = Handlebars.compile(templateContent);
-      const html = compiled(context);
-
-      const from =
-        this.configService.get<string>('MAIL_FROM') ||
-        '"ITJobs" <no-reply@itjobs.local>';
-
-      await this.transporter.sendMail({
-        from,
-        to,
-        subject,
-        html,
-      });
-
-      this.logger.log(`Email successfully sent to ${to} with template ${template}`);
     } catch (error: any) {
-      this.logger.error(
-        `Failed to send email to ${to} (template: ${template}): ${error?.message}`,
-        error?.stack,
-      );
+      this.logger.error(`Không đưa được email tới ${to} vào hàng đợi: ${error?.message}`);
     }
+  }
+
+  // Gửi email thật. Lỗi thì ném ra để BullMQ biết mà thử lại
+  async deliver(
+    to: string,
+    subject: string,
+    template: string,
+    context: Record<string, any>,
+  ): Promise<void> {
+    const templatePath = path.join(__dirname, 'templates', `${template}.hbs`);
+    const templateContent = await fs.promises.readFile(templatePath, 'utf-8');
+    const html = Handlebars.compile(templateContent)(context);
+
+    const from =
+      this.configService.get<string>('MAIL_FROM') ||
+      '"ITJobs" <no-reply@itjobs.local>';
+
+    await this.transporter.sendMail({ from, to, subject, html });
+
+    this.logger.log(`Email successfully sent to ${to} with template ${template}`);
   }
 }
