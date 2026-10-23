@@ -46,6 +46,7 @@ export class MailService {
           attempts: 5,
           backoff: { type: 'exponential', delay: 5000 },
           removeOnComplete: true,
+          removeOnFail: 1000, // chỉ giữ 1000 việc thất bại gần nhất để điều tra, tránh đầy Redis
         },
       );
     } catch (error: any) {
