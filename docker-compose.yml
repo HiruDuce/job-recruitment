@@ -9,12 +9,18 @@ services:
   redis:
     image: redis:7
 
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - '8025:8025'
+
   backend:
     build: ./backend
     env_file: ./backend/.env
     environment:
       MONGODB_URI: mongodb://mongo:27017/itjobs
       REDIS_URL: redis://redis:6379
+      MAIL_HOST: mailpit
     ports:
       - "8000:8000"
     depends_on:

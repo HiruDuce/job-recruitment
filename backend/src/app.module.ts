@@ -12,11 +12,18 @@ import { MailModule } from './mail/mail.module';
 import { CompaniesModule } from './companies/companies.module';
 import { JobsModule } from './jobs/jobs.module';
 import { ResumesModule } from './resumes/resumes.module';
+import { BullModule } from '@nestjs/bullmq';
+import { Redis } from 'ioredis';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+     BullModule.forRoot({
+      connection: new Redis(process.env.REDIS_URL ?? 'redis://localhost:6379', {
+        maxRetriesPerRequest: null,
+      }),
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -47,4 +54,4 @@ import { ResumesModule } from './resumes/resumes.module';
     ResumesModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
