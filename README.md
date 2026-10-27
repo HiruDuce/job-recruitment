@@ -4,7 +4,7 @@
 
 Website tuyển dụng IT với ba vai trò: **ứng viên** tìm việc và nộp CV, **nhà tuyển dụng (HR)** đăng tin và duyệt hồ sơ, **quản trị viên** quản lý toàn hệ thống. Backend NestJS + MongoDB, frontend React + Ant Design, đóng gói bằng Docker và đang chạy thật trên Vercel + Render.
 
-**Dùng thử:** [job-recruitment-tau.vercel.app](https://job-recruitment-tau.vercel.app) · **Tài liệu API:** [Swagger](https://job-recruitment-5m6p.onrender.com/swagger)
+**Dùng thử:** [job-recruitment-tau.vercel.app](itjobs.phunghieu.id.vn/) · **Tài liệu API:** [Swagger](https://job-recruitment-5m6p.onrender.com/swagger)
 
 > Server Render bản miễn phí "ngủ" sau 15 phút không có người dùng, nên lần mở đầu tiên có thể mất khoảng 1 phút.
 
