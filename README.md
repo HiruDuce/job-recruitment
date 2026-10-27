@@ -1,204 +1,143 @@
-# ITJobs - Website Tuyển Dụng Việc Làm IT (Job Recruitment)
+# ITJobs — Nền tảng tuyển dụng việc làm IT
 
-Hệ thống tuyển dụng việc làm IT trực tuyến toàn diện, hiện đại, bảo mật và chuẩn kiến trúc doanh nghiệp. Dự án được phát triển theo mô hình phân tách rõ ràng giữa **Backend (NestJS + MongoDB Mongoose)** và **Frontend (React 19 + Ant Design 5 + ProComponents)**.
+![CI](https://github.com/HiruDuce/job-recruitment/actions/workflows/ci.yml/badge.svg)
 
----
+Website tuyển dụng IT với ba vai trò: **ứng viên** tìm việc và nộp CV, **nhà tuyển dụng (HR)** đăng tin và duyệt hồ sơ, **quản trị viên** quản lý toàn hệ thống. Backend NestJS + MongoDB, frontend React + Ant Design, đóng gói bằng Docker và đang chạy thật trên Vercel + Render.
 
-## 1. Kiến Trúc & Công Nghệ Sử Dụng
+**Dùng thử:** [job-recruitment-tau.vercel.app](https://job-recruitment-tau.vercel.app) · **Tài liệu API:** [Swagger](https://job-recruitment-5m6p.onrender.com/swagger)
 
-### Backend
-- **Framework:** NestJS 11 (Modular Architecture, Dependency Injection)
-- **Database:** MongoDB với Mongoose ODM 8
-- **Authentication & Security:** 
-  - Passport Local & JWT Strategy
-  - Access Token (ngắn hạn: 15 phút) gửi qua Header Bearer
-  - Refresh Token Rotation bảo mật cao (lưu hash SHA-256 trong Database, cấp phát qua HTTP-Only Cookie, chặn tấn công XSS/CSRF)
-  - Helmet bảo vệ HTTP headers, CORS cấu hình chuẩn
-  - Phân quyền động **Dynamic RBAC Guard** theo từng cặp `(Method, ApiPath)` và gán theo Role
-- **Audit & Data Modeling:** Tự động lưu `createdBy`, `updatedBy`, `deletedBy` và hỗ trợ **Soft Delete** toàn hệ thống
-- **File & Email Service:**
-  - Upload file nội bộ kiểm duyệt định dạng (PDF cho hồ sơ CV, JPG/PNG/WEBP cho logo công ty) và giới hạn 5MB
-  - Gửi email thông báo tự động (Nodemailer + Handlebars template) khi trạng thái hồ sơ CV thay đổi
-- **API Documentation:** Tích hợp sẵn Swagger UI tại `/swagger`
+> Server Render bản miễn phí "ngủ" sau 15 phút không có người dùng, nên lần mở đầu tiên có thể mất khoảng 1 phút.
 
-### Frontend
-- **Framework & Bundler:** React 19 + Vite (SWC compiler) + TypeScript
-- **UI & Design System:** Ant Design 5 + Ant Design Pro-Components (ProTable, ProForm, ProLayout)
-- **Styling:** SCSS Modules + Ant Design Tokens
-- **State Management:** Redux Toolkit + Async-Mutex chống trùng lặp request làm mới Token khi gọi song song
-- **Routing:** React Router v7
-- **Rich Text & Sanitization:** ReactQuill cho bài đăng việc làm & giới thiệu công ty; DOMPurify lọc mã độc XSS
+### Tài khoản demo
 
----
+Đây là tài khoản **công khai** cho mục đích dùng thử, dữ liệu có thể bị thay đổi bởi người khác.
 
-## 2. Tài Khoản Mẫu Để Trải Nghiệm (Demo Accounts)
-
-Hệ thống có cơ chế tự động Seed dữ liệu (`SHOULD_INIT=true`) ngay trong lần khởi động đầu tiên với Database sạch:
-
-| Vai Trò (Role) | Email | Mật Khẩu | Quyền Hạn & Mục Đích Trải Nghiệm |
+| Vai trò | Email | Mật khẩu | Làm được gì |
 |---|---|---|---|
-| **Super Admin** | `admin@itjobs.local` | `admin@123456` | Toàn quyền hệ thống: Quản lý người dùng, phân quyền RBAC, vai trò, công ty, tin tuyển dụng và hồ sơ |
-| **Nhà Tuyển Dụng (HR)** | `hr@itjobs.local` | `admin@123456` | Gắn với công ty demo: Đăng tuyển & quản lý Job của công ty, duyệt hồ sơ CV của ứng viên (đổi trạng thái & xem lịch sử) |
-| **Ứng Viên (Candidate)** | `user@itjobs.local` | `admin@123456` | Tìm kiếm việc làm, xem chi tiết công ty, nộp hồ sơ CV (PDF), theo dõi trạng thái các công việc đã ứng tuyển |
+| Quản trị viên | `admin@itjobs.local` | `admin@123456` | Quản lý user, vai trò, quyền, công ty, job, hồ sơ |
+| Nhà tuyển dụng | `hr@itjobs.local` | `admin@123456` | Đăng và quản lý job của công ty mình, duyệt hồ sơ |
+| Ứng viên | `user@itjobs.local` | `admin@123456` | Tìm việc, nộp CV, theo dõi trạng thái |
 
----
+## Hình ảnh
 
-## 3. Hướng Dẫn Cài Đặt & Chạy Local
+![Trang chủ](docs/images/home.png)
+![Danh sách việc làm](docs/images/jobs.png)
+![Tài liệu API (Swagger)](docs/images/swagger.png)
 
-### Yêu Cầu Môi Trường
-- **Node.js:** phiên bản `18.x` hoặc `20.x+`
-- **MongoDB:** MongoDB Community Server đang chạy tại `localhost:27017` (hoặc MongoDB Atlas URI)
+## Tính năng
 
----
+**Ứng viên:** tìm kiếm và lọc việc theo kỹ năng, địa điểm, cấp bậc (bộ lọc đồng bộ lên URL); xem chi tiết việc làm và công ty; nộp CV dạng PDF (tối đa 5 MB, mỗi job nộp một lần); theo dõi trạng thái hồ sơ; nhận email khi trạng thái thay đổi.
 
-### Bước 1: Khởi Chạy Backend (API Server)
+**Nhà tuyển dụng (HR):** đăng, sửa, xoá tin tuyển dụng của công ty mình; xem hồ sơ ứng tuyển; đổi trạng thái hồ sơ (`PENDING` → `REVIEWING` → `APPROVED` / `REJECTED`) kèm lịch sử người đổi và thời điểm.
 
-1. Mở terminal và chuyển vào thư mục `backend`:
-   ```bash
-   cd backend
-   ```
+**Quản trị viên:** quản lý người dùng, vai trò, quyền, công ty, tin tuyển dụng và hồ sơ.
 
-2. Kiểm tra file cấu hình môi trường `.env`:
-   File `backend/.env` đã được cấu hình sẵn mẫu:
-   ```env
-   PORT=8000
-   NODE_ENV=development
-   MONGODB_URI=mongodb://localhost:27017/itjobs
+## Kiến trúc
 
-   JWT_ACCESS_SECRET=itjobs_access_secret_key_123456
-   JWT_ACCESS_EXPIRE=900
-   JWT_REFRESH_SECRET=itjobs_refresh_secret_key_123456
-   JWT_REFRESH_EXPIRE=604800
+```mermaid
+flowchart LR
+  U["Trình duyệt"] --> V["Vercel<br/>React + Vite"]
+  V -->|"/api (rewrite)"| R["Render<br/>NestJS (Docker)"]
+  R --> M[("MongoDB Atlas")]
+  R --> C[("Redis<br/>cache, giới hạn đăng nhập, hàng đợi")]
+  C -.->|"BullMQ worker"| R
+  R -->|"SMTP :2525"| B["Brevo<br/>gửi email"]
+```
 
-   SHOULD_INIT=true
-   ADMIN_EMAIL=admin@itjobs.local
-   ADMIN_PASSWORD=admin@123456
+Frontend gọi API bằng đường dẫn tương đối `/api/v1`. Vercel (và Nginx khi chạy Docker, Vite khi chạy dev) chuyển tiếp yêu cầu sang backend, nên trình duyệt chỉ thấy **một địa chỉ duy nhất**: cookie đăng nhập (`SameSite=Strict`) hoạt động bình thường và không cần cấu hình CORS.
 
-   MAIL_HOST=localhost
-   MAIL_PORT=1025
-   MAIL_USER=
-   MAIL_PASSWORD=
-   MAIL_FROM="ITJobs" <no-reply@itjobs.local>
-   ```
+## Điểm kỹ thuật đáng chú ý
 
-3. Cài đặt các gói phụ thuộc (nếu chưa cài):
-   ```bash
-   npm install
-   ```
+| Chủ đề | Cách làm |
+|---|---|
+| **Xác thực** | JWT access token 15 phút (giữ trong Redux) và **refresh token rotation**: mỗi refresh token chỉ dùng một lần, lưu **bản băm SHA-256** trong DB, gửi qua cookie `HttpOnly` |
+| **Chống đăng xuất oan** | Nhiều request cùng gặp 401 sẽ được **xếp hàng bằng mutex** ở frontend, chỉ một request đi refresh, các request còn lại dùng chung token mới |
+| **Phân quyền** | **RBAC động**: quyền là cặp `(HTTP method, API path)` lưu trong DB, kiểm tra bằng guard toàn cục. HR chỉ thấy dữ liệu công ty mình |
+| **Upload an toàn** | Giới hạn 5 MB, kiểm tra loại file bằng **magic number** (không tin đuôi file), danh sách thư mục cho phép chống path traversal, đặt tên file ngẫu nhiên |
+| **Redis** | Cache danh sách việc làm (cache-aside, TTL 60 giây) và **khóa đăng nhập 15 phút sau 5 lần sai** (trả mã 429) |
+| **Hàng đợi email** | Gửi email qua **BullMQ**: tự thử lại tối đa 5 lần với thời gian chờ tăng dần, không mất email khi máy chủ email lỗi |
+| **Dữ liệu** | Soft delete và các trường kiểm toán (`createdBy`, `updatedBy`, `deletedBy`) cho toàn hệ thống |
+| **Đóng gói** | Docker multi-stage cho backend và frontend (Nginx), `docker compose` chạy cả hệ thống |
+| **CI/CD** | GitHub Actions chạy test và build mỗi lần push; Render chỉ deploy khi CI thành công |
 
-4. Chạy Backend ở chế độ Development:
-   ```bash
-   npm run start:dev
-   ```
-   - **Backend API URL:** [http://localhost:8000/api/v1](http://localhost:8000/api/v1)
-   - **Swagger UI Tài Liệu API:** [http://localhost:8000/swagger](http://localhost:8000/swagger)
+## Chạy bằng Docker (nhanh nhất)
 
----
+Chỉ cần cài [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
-### Bước 2: Khởi Chạy Frontend (Client & Admin)
+```bash
+git clone https://github.com/HiruDuce/job-recruitment.git
+cd job-recruitment
+cp backend/.env.example backend/.env
+docker compose up -d --build
+```
 
-1. Mở một terminal mới và chuyển vào thư mục `frontend`:
-   ```bash
-   cd frontend
-   ```
+| Địa chỉ | Là gì |
+|---|---|
+| http://localhost:3000 | Website |
+| http://localhost:8000/swagger | Tài liệu API |
+| http://localhost:8025 | Mailpit: hộp thư giả, xem email hệ thống gửi ra |
 
-2. Cài đặt các gói phụ thuộc (nếu chưa cài):
-   ```bash
-   npm install
-   ```
+Lần chạy đầu, hệ thống tự tạo dữ liệu mẫu (3 tài khoản ở trên, 7 công ty, 20 việc làm).
 
-3. Chạy Frontend ở chế độ Development:
-   ```bash
-   npm run dev
-   ```
+Nếu sau khi build lại, trang báo lỗi 502, chạy `docker compose restart frontend`.
 
-4. Mở trình duyệt và truy cập:
-   - **Giao diện Ứng Viên & Trang Chủ:** [http://localhost:5173](http://localhost:5173)
-   - **Đăng Nhập:** [http://localhost:5173/login](http://localhost:5173/login)
-   - **Trang Quản Trị (dành cho Admin / HR):** [http://localhost:5173/admin](http://localhost:5173/admin)
+## Chạy không dùng Docker
 
----
+Cần Node.js 22, MongoDB và Redis đang chạy trên máy.
 
-## 4. Các Tính Năng Chính
+```bash
+# Backend
+cd backend
+cp .env.example .env
+npm install
+npm run start:dev        # http://localhost:8000
 
-### Phía Người Dùng (Client Portal)
-- **Trang chủ (Home):**
-  - Banner giới thiệu việc làm IT chuẩn công nghệ cao
-  - Thanh tìm kiếm thông minh đa tiêu chí (Kỹ năng, Địa điểm)
-  - Danh sách việc làm IT mới nhất
-  - Danh sách công ty công nghệ nổi bật
-- **Tìm kiếm & Lọc Việc Làm (Job List):**
-  - Bộ lọc đa chiều theo Kỹ năng (CSV/tags), Địa điểm (Hà Nội, TP.HCM, Đà Nẵng...), Cấp bậc (Intern, Fresher, Junior, Middle, Senior)
-  - Đồng bộ trạng thái tìm kiếm lên URL Query (hỗ trợ chia sẻ liên kết, F5 giữ nguyên bộ lọc)
-  - Phân trang chuẩn UX
-- **Chi tiết Việc Làm & Nộp CV (Job Detail & Apply):**
-  - Hiển thị đầy đủ thông tin lương (VNĐ), địa điểm, hạn nộp hồ sơ, mô tả chi tiết bài đăng (render an toàn qua DOMPurify)
-  - Modal nộp hồ sơ: Kéo thả file CV định dạng PDF (tối đa 5MB)
-  - Quy tắc bảo đảm tính toàn vẹn: Mỗi ứng viên chỉ được ứng tuyển 1 lần cho 1 việc làm
-- **Danh sách & Chi tiết Công Ty (Company List & Detail):**
-  - Tìm kiếm công ty theo tên, xem thông tin trụ sở, giới thiệu chi tiết
-  - Liệt kê danh sách các vị trí tuyển dụng đang mở của công ty đó
-- **Quản lý Tài Khoản & Lịch sử Nộp CV (My Account):**
-  - Xem danh sách toàn bộ CV đã ứng tuyển, trạng thái hiện tại (Chờ duyệt, Đang xem xét, Đã duyệt, Từ chối) và liên kết mở trực tiếp file PDF đã nộp
+# Frontend (mở terminal khác)
+cd frontend
+npm install
+npm run dev              # http://localhost:5173
+```
 
-### Phía Quản Trị (Admin & HR Portal)
-- **Bảo mật truy cập (ProtectedRoute & Dynamic Access):**
-  - Ứng viên thông thường truy cập `/admin` tự động nhận lỗi 403 Forbidden
-  - Menu hiển thị linh hoạt theo module được cấp phép
-- **Quản lý Quyền Hạn (Permissions) & Vai Trò (Roles):**
-  - Quản lý danh mục quyền `(API Path, Method, Module)`
-  - Tạo mới và cập nhật vai trò, phân quyền theo dạng lưới module Collapse + Checkbox Group
-  - Bảo vệ vai trò `ADMIN` mặc định không thể xóa
-- **Quản lý Người Dùng (Users):**
-  - Thêm, sửa, xóa, tìm kiếm người dùng theo tên và email
-  - Hỗ trợ chọn vai trò: khi chọn vai trò `HR`, form bắt buộc phải gắn với một `Company` cụ thể
-- **Quản lý Công Ty (Companies):**
-  - Tải lên logo công ty qua hình thức `picture-card` lưu vào máy chủ
-  - Soạn thảo mô tả công ty qua trình soạn thảo Rich Text (ReactQuill)
-- **Quản lý Việc Làm (Jobs):**
-  - Admin có thể tạo Job cho bất kỳ công ty nào
-  - HR chỉ thấy và quản lý các công việc thuộc về công ty của mình (HR Scoping tự động)
-  - Chọn thời gian tuyển dụng bằng `ProFormDateRangePicker`
-- **Quản lý Hồ Sơ Tuyển Dụng (Resumes):**
-  - Xem danh sách hồ sơ ứng viên nộp vào
-  - Xem trước và mở liên kết file PDF
-  - Đổi trạng thái ứng viên (PENDING → REVIEWING → APPROVED / REJECTED)
-  - Tự động ghi nhận lịch sử xử lý (Timeline) bao gồm người cập nhật và thời gian
-  - Tự động kích hoạt email thông báo tới ứng viên khi trạng thái thay đổi
+Muốn xem email khi phát triển, chạy thêm Mailpit: `docker run -p 1025:1025 -p 8025:8025 axllent/mailpit`.
 
----
-
-## 5. Cấu Trúc Dự Án
+## Cấu trúc thư mục
 
 ```
 job-recruitment/
-├── backend/
-│   ├── src/
-│   │   ├── auth/          # Authentication (JWT, Local, Cookies, RBAC Guard)
-│   │   ├── users/         # Quản lý người dùng & phân quyền
-│   │   ├── roles/         # Vai trò người dùng (ADMIN, HR, NORMAL_USER)
-│   │   ├── permissions/   # Danh mục quyền hạn theo endpoint
-│   │   ├── companies/     # Quản lý công ty tuyển dụng
-│   │   ├── jobs/          # Quản lý tin tuyển dụng IT
-│   │   ├── resumes/       # Hồ sơ ứng tuyển & quy trình xét duyệt
-│   │   ├── files/         # Upload & lưu trữ tập tin (images, pdf)
-│   │   ├── mail/          # Dịch vụ gửi email thông báo & templates HBS
-│   │   ├── databases/     # Khởi tạo & Seed dữ liệu mặc định
-│   │   └── core/          # BaseSchema, Soft-delete plugin, Paginate, Interceptors
-│   ├── .env               # Cấu hình biến môi trường Backend
-│   └── package.json
-│
-├── frontend/
-│   ├── src/
-│   │   ├── components/    # Reusable components (Header, Footer, JobCard, SearchBar, Access)
-│   │   ├── layouts/       # ClientLayout, AdminLayout (ProLayout)
-│   │   ├── pages/         # Các trang Client (Home, JobList, JobDetail...) & Admin (User, Role...)
-│   │   ├── redux/         # Redux Toolkit store & accountSlice
-│   │   ├── config/        # Axios interceptors, API calls, Constants
-│   │   └── router.tsx     # Định tuyến ứng dụng React Router v7
-│   └── package.json
-│
-├── .handoff/
-│   └── PLAN.md            # Toàn bộ kế hoạch kiến trúc & tiến độ hoàn thành 20 tasks
+├── backend/             NestJS: auth, users, roles, permissions, companies, jobs, resumes, files, mail
+├── frontend/            React + Vite: components, layouts, pages, redux, config (axios)
+├── docs/images/         Ảnh minh họa cho README
+├── .github/workflows/   CI (GitHub Actions)
+├── docker-compose.yml   mongo, redis, mailpit, backend, frontend
 └── README.md
 ```
+
+## Kiểm thử
+
+Backend có bộ test cho hàm kiểm tra quyền (`npm test` trong `backend/`). CI chạy test và build cho cả backend lẫn frontend ở mỗi lần push và mỗi Pull Request.
+
+## Triển khai
+
+| Thành phần | Dịch vụ |
+|---|---|
+| Frontend | Vercel (`frontend/vercel.json` chuyển tiếp `/api` sang backend) |
+| Backend | Render, build từ `backend/Dockerfile` |
+| Cơ sở dữ liệu | MongoDB Atlas |
+| Redis | Render Key Value (chính sách bộ nhớ `noeviction` cho hàng đợi) |
+| Email | Brevo SMTP qua cổng 2525 (Render gói miễn phí chặn cổng 25, 465, 587) |
+
+## Hạn chế đã biết
+
+- **File upload lưu trên ổ đĩa của server**: trên Render miễn phí, CV và logo đã tải lên sẽ mất khi deploy lại. Hướng cải thiện: chuyển sang dịch vụ lưu file như Cloudinary.
+- **Mỗi người dùng chỉ có một phiên đăng nhập**: DB lưu một refresh token cho mỗi người dùng, nên đăng nhập thiết bị mới sẽ làm thiết bị cũ phải đăng nhập lại. Chưa phát hiện việc refresh token bị dùng lại.
+- **Khi Redis ngừng hoạt động**, hệ thống vẫn chạy nhưng danh sách việc làm và đăng nhập chậm đi nhiều giây trước khi rơi về MongoDB. Hướng cải thiện: cho lệnh cache bỏ cuộc ngay khi mất kết nối.
+- **Độ phủ test còn thấp**: mới có test cho hàm kiểm tra quyền.
+- Email trên bản demo gửi từ địa chỉ Gmail qua Brevo nên có thể hiện tên miền của Brevo và dễ vào thư mục Spam. Cần tên miền riêng để xác thực đầy đủ.
+
+## Về quá trình phát triển
+
+Dự án được làm cùng các công cụ AI (Claude, Antigravity) để viết và review code. Tôi đã đọc, chạy thử và có thể giải thích các phần chính: luồng xác thực và refresh token, phân quyền, hàng đợi email, Docker và CI/CD.
+
+## Tác giả
+
+**Phùng Đức Hiếu** · [GitHub](https://github.com/HiruDuce) · hieuphung180805@gmail.com

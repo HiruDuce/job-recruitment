@@ -10,3 +10,13 @@ yarn-debug.log*
 yarn-error.log*
 .DS_Store
 Thumbs.db
+
+# Công cụ AI chạy cục bộ trên máy, không thuộc mã nguồn dự án
+.agent/
+.agents/
+.claude/
+.windsurf/
+agent/
+.handoff/
+AGENTS.md
+skills-lock.json
