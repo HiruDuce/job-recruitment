@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router';
 import { ConfigProvider } from 'antd';
 import viVN from 'antd/locale/vi_VN';
+import { ProConfigProvider, viVNIntl } from '@ant-design/pro-components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -29,27 +30,37 @@ const App = () => {
       locale={viVN}
       theme={{
         token: {
-          colorPrimary: '#0052cc',
+          colorPrimary: '#1F3D2B',
           fontFamily:
-            "'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-          borderRadius: 8,
-          colorLink: '#0052cc',
-          colorLinkHover: '#0065ff',
-          colorTextBase: '#0f172a',
+            "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          borderRadius: 2,
+          colorLink: '#1F3D2B',
+          colorLinkHover: '#B4532A',
+          colorTextBase: '#1F3D2B',
+          colorBgBase: '#FFFBF2',
+          colorBorder: '#1F3D2B',
           controlHeight: 40,
         },
         components: {
           Card: {
             headerFontSize: 16,
+            borderRadiusLG: 2,
           },
           Button: {
             controlHeight: 40,
             paddingContentHorizontal: 16,
+            borderRadius: 2,
+            fontWeight: 600,
+          },
+          Tag: {
+            borderRadiusSM: 2,
           },
         },
       }}
     >
-      <RouterProvider router={router} />
+      <ProConfigProvider intl={viVNIntl}>
+        <RouterProvider router={router} />
+      </ProConfigProvider>
     </ConfigProvider>
   );
 };
