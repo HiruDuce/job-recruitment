@@ -41,7 +41,7 @@ flowchart LR
   R --> M[("MongoDB Atlas")]
   R --> C[("Redis<br/>cache, giới hạn đăng nhập, hàng đợi")]
   C -.->|"BullMQ worker"| R
-  R -->|"SMTP :2525"| B["Brevo<br/>gửi email"]
+  R -->|"SMTP :2587"| B["Resend<br/>gửi email"]
 ```
 
 Frontend gọi API bằng đường dẫn tương đối `/api/v1`. Vercel (và Nginx khi chạy Docker, Vite khi chạy dev) chuyển tiếp yêu cầu sang backend, nên trình duyệt chỉ thấy **một địa chỉ duy nhất**: cookie đăng nhập (`SameSite=Strict`) hoạt động bình thường và không cần cấu hình CORS.
@@ -124,7 +124,7 @@ Backend có bộ test cho hàm kiểm tra quyền (`npm test` trong `backend/`).
 | Backend | Render, build từ `backend/Dockerfile` |
 | Cơ sở dữ liệu | MongoDB Atlas |
 | Redis | Render Key Value (chính sách bộ nhớ `noeviction` cho hàng đợi) |
-| Email | Brevo SMTP qua cổng 2525 (Render gói miễn phí chặn cổng 25, 465, 587) |
+| Email | Resend SMTP qua cổng 2587 (Render gói miễn phí chặn cổng 25, 465, 587), gửi từ tên miền riêng đã xác thực |
 
 ## Hạn chế đã biết
 
@@ -132,7 +132,7 @@ Backend có bộ test cho hàm kiểm tra quyền (`npm test` trong `backend/`).
 - **Mỗi người dùng chỉ có một phiên đăng nhập**: DB lưu một refresh token cho mỗi người dùng, nên đăng nhập thiết bị mới sẽ làm thiết bị cũ phải đăng nhập lại. Chưa phát hiện việc refresh token bị dùng lại.
 - **Khi Redis ngừng hoạt động**, hệ thống vẫn chạy nhưng danh sách việc làm và đăng nhập chậm đi nhiều giây trước khi rơi về MongoDB. Hướng cải thiện: cho lệnh cache bỏ cuộc ngay khi mất kết nối.
 - **Độ phủ test còn thấp**: mới có test cho hàm kiểm tra quyền.
-- Email trên bản demo gửi từ địa chỉ Gmail qua Brevo nên có thể hiện tên miền của Brevo và dễ vào thư mục Spam. Cần tên miền riêng để xác thực đầy đủ.
+- **Email đang gửi dở có thể mất khi deploy lại**: server bị tắt giữa lúc worker đang gửi thì BullMQ đánh dấu việc đó là "stalled" và không thử lại. Hướng cải thiện: tắt server nhẹ nhàng (graceful shutdown) để worker làm xong việc đang dở.
 
 ## Về quá trình phát triển
 
