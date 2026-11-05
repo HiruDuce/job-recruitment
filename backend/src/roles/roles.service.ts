@@ -101,6 +101,10 @@ export class RolesService {
       throw new BadRequestException('Không được phép vô hiệu hóa role ADMIN');
     }
 
+    if (currentRole.name === ADMIN_ROLE && updateRoleDto.permissions) {
+      throw new BadRequestException('Không được phép sửa quyền của role ADMIN');
+    }
+
     try {
       const updated = await this.roleModel.findByIdAndUpdate(
         id,

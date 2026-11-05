@@ -106,18 +106,21 @@ export const RolePage: React.FC = () => {
       valueType: 'option',
       render: (_, record) => (
         <Space>
-          <Access permission={ALL_PERMISSIONS.ROLES.UPDATE} hideChildren>
-            <Button
-              type="text"
-              icon={<EditOutlined style={{ color: '#1677ff' }} />}
-              onClick={() => {
-                setCurrentRecord(record);
-                setModalOpen(true);
-              }}
-            >
-              Sửa
-            </Button>
-          </Access>
+          {record.name !== 'ADMIN' && (
+            <Access permission={ALL_PERMISSIONS.ROLES.UPDATE} hideChildren>
+              <Button
+                type="text"
+                icon={<EditOutlined style={{ color: '#1677ff' }} />}
+                onClick={() => {
+                  setCurrentRecord(record);
+                  setModalOpen(true);
+                }}
+              >
+                Sửa
+              </Button>
+            </Access>
+          )}
+
 
           {record.name !== 'ADMIN' && (
             <Access permission={ALL_PERMISSIONS.ROLES.DELETE} hideChildren>
