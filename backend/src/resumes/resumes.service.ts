@@ -72,24 +72,33 @@ export class ResumesService {
       },
     ];
 
-    const created = await this.resumeModel.create({
-      email: user.email,
-      user: user._id,
-      url: createResumeDto.url,
-      status: 'PENDING',
-      company: companyId,
-      job: job._id,
-      history: initialHistory,
-      createdBy: {
-        _id: user._id,
+    try {
+      const created = await this.resumeModel.create({
         email: user.email,
-      },
-    });
+        user: user._id,
+        url: createResumeDto.url,
+        status: 'PENDING',
+        company: companyId,
+        job: job._id,
+        history: initialHistory,
+        createdBy: {
+          _id: user._id,
+          email: user.email,
+        },
+      });
 
-    return {
-      _id: created._id,
-      createdAt: created.createdAt,
-    };
+      return {
+        _id: created._id,
+        createdAt: created.createdAt,
+      };
+    } catch (error: any) {
+      if (error?.code === 11000) {
+        throw new BadRequestException(
+          'Bạn đã nộp CV cho công việc này rồi, không thể nộp lại',
+        );
+      }
+      throw error;
+    }
   }
 
   async findMine(user: IUser) {
