@@ -143,6 +143,7 @@ export class AuthService {
 
     const hashedIncoming = this.hashToken(refreshToken);
     if (hashedIncoming !== user.refreshToken) {
+      await this.usersService.setRefreshToken(payload.sub, null);
       res.clearCookie('refresh_token', { path: '/api/v1/auth' });
       throw new UnauthorizedException('Refresh token không khớp hoặc đã bị sử dụng');
     }
