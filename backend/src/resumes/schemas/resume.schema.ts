@@ -68,6 +68,10 @@ export class Resume extends BaseSchema {
 
 export const ResumeSchema = SchemaFactory.createForClass(Resume);
 
-ResumeSchema.index({ user: 1, job: 1 });
+ResumeSchema.index(
+  { user: 1, job: 1 },
+  { unique: true, partialFilterExpression: { isDeleted: false } },
+);
+
 ResumeSchema.index({ company: 1 });
 ResumeSchema.index({ status: 1 });
