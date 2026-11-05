@@ -47,10 +47,14 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     return user;
   }
 
-  // cộng 1 lần sai, lần sai đầu tiên thì đặt hạn 15 phút
-  // ponytail: INCR và EXPIRE là 2 lệnh riêng; server sập đúng giữa 2 lệnh thì key không có hạn → dùng MULTI nếu cần chặt chẽ
+  // cộng 1 lần sai; lần đầu tạo khoá với hạn 15 phút, gửi chung 1 khối để không có khoá vô hạn
   private async recordFail(key: string) {
-    const count = await redis?.incr(key).catch(() => null);
-    if (count === 1) await redis?.expire(key, LOCK_SECONDS).catch(() => null);
+    await redis
+      ?.multi()
+      .set(key, 0, 'EX', LOCK_SECONDS, 'NX')
+      .incr(key)
+      .exec()
+      .catch(() => null);
   }
+
 }
