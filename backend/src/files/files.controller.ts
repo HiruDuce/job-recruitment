@@ -50,6 +50,7 @@ export class FilesController {
           }),
           new FileTypeValidator({
             fileType: /^(image\/(jpeg|png|webp)|application\/pdf)$/,
+            overrideMimeType: true,
           }),
         ],
       }),
