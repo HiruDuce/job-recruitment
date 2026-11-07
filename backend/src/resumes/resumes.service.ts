@@ -148,7 +148,7 @@ export class ResumesService {
 
     const updated = await this.resumeModel
       .findOneAndUpdate(
-        { _id: id, ...userScope },
+        { _id: id, ...userScope, status: { $ne: updateResumeStatusDto.status } },
         {
           status: updateResumeStatusDto.status,
           updatedBy: {
@@ -164,10 +164,15 @@ export class ResumesService {
       .populate({ path: 'user', select: 'name' });
 
     if (!updated) {
+      const exists = await this.resumeModel.exists({ _id: id, ...userScope });
+      if (exists) {
+        throw new BadRequestException('Hồ sơ đã ở trạng thái này');
+      }
       throw new NotFoundException(
         'Không tìm thấy hồ sơ hoặc bạn không có quyền cập nhật hồ sơ này',
       );
     }
+
 
     // Gửi email thông báo trạng thái mới (bất đồng bộ, không chặn response)
     const candidateName =
