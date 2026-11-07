@@ -132,7 +132,7 @@ Backend có bộ test cho hàm kiểm tra quyền (`npm test` trong `backend/`).
 - **Mỗi người dùng chỉ có một phiên đăng nhập**: DB lưu một refresh token cho mỗi người dùng, nên đăng nhập thiết bị mới sẽ làm thiết bị cũ phải đăng nhập lại. Khi một refresh token cũ bị dùng lại, hệ thống huỷ cả phiên để chặn kẻ trộm token, nên người dùng thật đôi khi bị đăng xuất oan, ví dụ khi thiết bị cũ gọi refresh hoặc 2 tab refresh cùng lúc. Hướng cải thiện: lưu phiên riêng cho từng thiết bị.
 - **Khi Redis ngừng hoạt động**, danh sách việc làm đọc thẳng MongoDB và vẫn nhanh, nhưng khoá đăng nhập sau 5 lần sai tạm thời không hoạt động. Email vẫn nằm chờ trong hàng đợi và được gửi khi Redis hoạt động lại.
 - **Độ phủ test còn thấp**: mới có test cho hàm kiểm tra quyền.
-- **Email đang gửi dở có thể mất khi deploy lại**: server bị tắt giữa lúc worker đang gửi thì BullMQ đánh dấu việc đó là "stalled" và không thử lại. Hướng cải thiện: tắt server nhẹ nhàng (graceful shutdown) để worker làm xong việc đang dở.
+- **Email gửi quá lâu vẫn có thể mất khi deploy lại**: khi tắt, server chờ worker gửi xong email đang dở, nhưng nếu máy chủ email phản hồi lâu hơn thời gian Render cho phép thì server vẫn bị buộc tắt.
 
 ## Về quá trình phát triển
 
