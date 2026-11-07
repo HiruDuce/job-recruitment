@@ -48,6 +48,8 @@ async function bootstrap() {
   SwaggerModule.setup('swagger', app, document);
 
   const port = configService.get<number>('PORT') || 8000;
+  app.enableShutdownHooks(['SIGTERM', 'SIGINT'], { useProcessExit: true });
+
   await app.listen(port);
 }
 bootstrap();
