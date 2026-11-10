@@ -114,7 +114,19 @@ job-recruitment/
 
 ## Kiểm thử
 
-Backend có bộ test cho hàm kiểm tra quyền (`npm test` trong `backend/`). CI chạy test và build cho cả backend lẫn frontend ở mỗi lần push và mỗi Pull Request.
+Chạy `npm test` trong `backend/`. Các unit test dùng đồ giả (mock) thay cho MongoDB và Redis, nên không cần bật Docker:
+
+| Chủ đề | Kiểm tra |
+|---|---|
+| Phân quyền | Kiểm tra quyền theo method và đường dẫn API |
+| Refresh token | Token cũ bị dùng lại thì huỷ cả phiên |
+| Khoá đăng nhập | Đếm lần sai và đặt hạn trong cùng một khối `MULTI`, đủ 5 lần thì trả 429 |
+| Vai trò ADMIN | Không cho sửa danh sách quyền của ADMIN |
+| Nộp CV | Trùng hồ sơ (lỗi `11000` từ unique index) trả 400 thay vì 500 |
+| Đổi trạng thái hồ sơ | Không ghi và không gửi email khi trạng thái không đổi; HR chỉ thao tác trong công ty mình |
+| Redis | Client cache báo lỗi ngay khi mất kết nối |
+
+CI chạy test và build cho cả backend lẫn frontend ở mỗi lần push và mỗi Pull Request.
 
 ## Triển khai
 
@@ -131,7 +143,7 @@ Backend có bộ test cho hàm kiểm tra quyền (`npm test` trong `backend/`).
 - **File upload lưu trên ổ đĩa của server**: trên Render miễn phí, CV và logo đã tải lên sẽ mất khi deploy lại. Hướng cải thiện: chuyển sang dịch vụ lưu file như Cloudinary.
 - **Mỗi người dùng chỉ có một phiên đăng nhập**: DB lưu một refresh token cho mỗi người dùng, nên đăng nhập thiết bị mới sẽ làm thiết bị cũ phải đăng nhập lại. Khi một refresh token cũ bị dùng lại, hệ thống huỷ cả phiên để chặn kẻ trộm token, nên người dùng thật đôi khi bị đăng xuất oan, ví dụ khi thiết bị cũ gọi refresh hoặc 2 tab refresh cùng lúc. Hướng cải thiện: lưu phiên riêng cho từng thiết bị.
 - **Khi Redis ngừng hoạt động**, danh sách việc làm đọc thẳng MongoDB và vẫn nhanh, nhưng khoá đăng nhập sau 5 lần sai tạm thời không hoạt động. Email vẫn nằm chờ trong hàng đợi và được gửi khi Redis hoạt động lại.
-- **Độ phủ test còn thấp**: mới có test cho hàm kiểm tra quyền.
+- **Chưa có test end-to-end**: các test hiện tại kiểm tra từng service riêng lẻ. Những phần chỉ thấy được khi chạy cả ứng dụng, như kiểm tra loại file upload hay tắt server nhẹ nhàng, mới được kiểm tra bằng tay.
 - **Email gửi quá lâu vẫn có thể mất khi deploy lại**: khi tắt, server chờ worker gửi xong email đang dở, nhưng nếu máy chủ email phản hồi lâu hơn thời gian Render cho phép thì server vẫn bị buộc tắt.
 
 ## Về quá trình phát triển
