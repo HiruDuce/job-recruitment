@@ -137,10 +137,11 @@ CI chạy test và build cho cả backend lẫn frontend ở mỗi lần push v�
 | Cơ sở dữ liệu | MongoDB Atlas |
 | Redis | Render Key Value (chính sách bộ nhớ `noeviction` cho hàng đợi) |
 | Email | Resend SMTP qua cổng 2587 (Render gói miễn phí chặn cổng 25, 465, 587), gửi từ tên miền riêng đã xác thực |
+| File CV và logo | Cloudinary (khi có `CLOUDINARY_*`; không cấu hình thì lưu vào ổ đĩa server) |
 
 ## Hạn chế đã biết
 
-- **File upload lưu trên ổ đĩa của server**: trên Render miễn phí, CV và logo đã tải lên sẽ mất khi deploy lại. Hướng cải thiện: chuyển sang dịch vụ lưu file như Cloudinary.
+- **Link CV là công khai**: file trên Cloudinary không cần đăng nhập vẫn tải được, chỉ được bảo vệ bằng tên file ngẫu nhiên. Hướng cải thiện: dùng link có chữ ký và thời hạn.
 - **Mỗi người dùng chỉ có một phiên đăng nhập**: DB lưu một refresh token cho mỗi người dùng, nên đăng nhập thiết bị mới sẽ làm thiết bị cũ phải đăng nhập lại. Khi một refresh token cũ bị dùng lại, hệ thống huỷ cả phiên để chặn kẻ trộm token, nên người dùng thật đôi khi bị đăng xuất oan, ví dụ khi thiết bị cũ gọi refresh hoặc 2 tab refresh cùng lúc. Hướng cải thiện: lưu phiên riêng cho từng thiết bị.
 - **Khi Redis ngừng hoạt động**, danh sách việc làm đọc thẳng MongoDB và vẫn nhanh, nhưng khoá đăng nhập sau 5 lần sai tạm thời không hoạt động. Email vẫn nằm chờ trong hàng đợi và được gửi khi Redis hoạt động lại.
 - **Chưa có test end-to-end**: các test hiện tại kiểm tra từng service riêng lẻ. Những phần chỉ thấy được khi chạy cả ứng dụng, như kiểm tra loại file upload hay tắt server nhẹ nhàng, mới được kiểm tra bằng tay.
