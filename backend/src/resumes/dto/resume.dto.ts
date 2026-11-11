@@ -6,9 +6,11 @@ import { RESUME_STATUS } from '../schemas/resume.schema';
 export class CreateResumeDto {
   @ApiProperty({ example: '/images/resume/12345678-1234-1234-1234-123456789abc.pdf' })
   @IsNotEmpty({ message: 'url CV không được để trống' })
-  @Matches(/^\/images\/resume\/.+\.pdf$/, {
-    message: 'url phải có định dạng /images/resume/*.pdf',
-  })
+  @Matches(
+    /^(\/images\/resume\/|https:\/\/res\.cloudinary\.com\/rusdecqy\/image\/upload\/v\d+\/resume\/)[\w-]+\.pdf$/,
+    { message: 'url CV không hợp lệ' },
+  )
+
   url: string;
 
   @ApiProperty({ example: '64e4...' })

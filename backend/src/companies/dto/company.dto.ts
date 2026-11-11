@@ -20,9 +20,11 @@ export class CreateCompanyDto {
 
   @ApiProperty({ example: '/images/company/abc.png' })
   @IsNotEmpty({ message: 'Logo không được để trống' })
-  @Matches(/^\/images\/company\//, {
-    message: 'Logo phải có đường dẫn bắt đầu bằng /images/company/',
-  })
+  @Matches(
+    /^(\/images\/company\/|https:\/\/res\.cloudinary\.com\/rusdecqy\/image\/upload\/v\d+\/company\/)[\w-]+\.\w+$/,
+    { message: 'Logo không hợp lệ' },
+  )
+
   logo: string;
 }
 
